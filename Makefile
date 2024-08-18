@@ -1,75 +1,107 @@
 # **************************************************************************** #
 # Makefile builtin approach
 # **************************************************************************** #
-UNAME		:=	$(shell uname -s)
-NAME		=	cub3d
-CFLAGS		+=	-Wall -Wextra -Werror -Ofast -Iinc -g3
-LDFLAGS		+=	-L$(LIBFT_DIR) -lft
+UNAME	:=	$(shell uname -s)
+NAME	=	cub3d
+RM		=	rm -fr
 
-# **************************************************************************** #
-#   SYSTEM SPECIFIC SETTINGS                                                   #
-# **************************************************************************** #
-ifeq ($(UNAME), Linux)
-	CC		=	gcc
-	CFLAGS	+=	-D LINUX -Wno-unused-result
-	NUMPROC	:=	$(shell grep -c ^processor /proc/cpuinfo)
-else ifeq ($(UNAME), Darwin)
-	CC		=	cc
-	NUMPROC := $(shell sysctl -n hw.ncpu)
+ifeq ($(UNAME), Darwin) # mac
+	CC	= cc
+else ifeq ($(UNAME), FreeBSD) # FreeBSD
+	CC	= clang
+else # linux or others
+	CC		=	gcc -M
+	LDFLAGS	+=	-lbsd
 endif
 
-LIBFT_DIR	=	zlibft
-LIBFT		=	$(LIBFT_DIR)/libft.a
-RM			=	rm -f
+# **************************************************************************** #
+#   SYSTEM SPECIFIC SETTINGS
+# **************************************************************************** #
+ifeq ($(UNAME), Linux)
+	LIBX_DIR	+=	minilibx/linux
+	CFLAGS		+=	-D LINUX -Wno-unused-result
+	NUMPROC		:=	$(shell grep -c ^processor /proc/cpuinfo)
+else ifeq ($(UNAME), Darwin)
+	LIBX_DIR	+=	minilibx/opengl
+	NUMPROC		:= $(shell sysctl -n hw.ncpu)
+endif
+
+# **************************************************************************** #
+#   Project based configuration
+# **************************************************************************** #
+CFLAGS		+=	-Wall -Wextra -Werror -Ofast -Iinc
+LDFLAGS		+=	-L$(LIBC_DIR) -lft
+
+LIBC_DIR	=	zlibc
+LIBC		=	$(LIBC_DIR)/libft.a
+LIBX		=	$(LIBX_DIR)/libmlx.a
+
+TEXTTURE_DIR	=	texture
+TEXTTURE_FILES	=	$(TEXTTURE_DIR)/east_texture \
+					$(TEXTTURE_DIR)/north_texture \
+					$(TEXTTURE_DIR)/south_texture \
+					$(TEXTTURE_DIR)/west_texture
 
 SRCDIR		=	src
-PARSEDIR	=	$(SRCDIR)/parse
+GFXDIR		=	$(SRCDIR)/gfx
 UTILSDIR	=	$(SRCDIR)/utils
 DEBUGDIR	=	$(SRCDIR)/debug
+PARSEDIR	=	$(SRCDIR)/parse
 
 # Source files
-SRCS		=	$(SRCDIR)/cub3d.c \
-				$(PARSEDIR)/parse.c \
-				$(UTILSDIR)/utils.c \
-				$(DEBUGDIR)/debug.c
+SRC			=	$(SRCDIR)/cub3d.c \
+				$(PARSEDIR)/parse.c
+#				$(DEBUGDIR)/print_debug.c
+#				$(GFXDIR)/gfx.c
+#				$(UTILSDIR)/utils.c
 
-# Object files
-# OBJS		=	$(SRCS:.c=.o)
-
-.PHONY: all clean fclean re info update_makefile
+.PHONY: all clean fclean re info debug
 
 # Compile object files
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS)
-	make -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+# Object files
+OBJ		=	$(SRC:.c=.o)
+
+$(LIBX):
+	@make -C $(LIBX_DIR)
+
+$(LIBC):
+	@make -C $(LIBC_DIR)
+
+$(NAME): $(OBJ) $(LIBC)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(LIBC) $(OBJ) -o $(NAME)
 
 all: MAKEFLAGS	+=	-j$(NUMPROC)
-all: $(NAME)
+all: $(NAME) info
 
 clean:
-	$(RM) $(OBJS)
-	make -C $(LIBFT_DIR) clean
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(RM) $(NAME)
-	make -C $(LIBFT_DIR) fclean
+	@make -C $(LIBC_DIR) fclean
+	@make -C $(LIBX_DIR) clean
 
 re: fclean all
 
-# Self-modifying rule
-update_makefile:
-# 	@find $(SRCDIR) -name "*.c" | sort > new_files.txt
-# 	@grep -oE '\b\w+\.c\b' Makefile | sort > existing_files.txt
-# 	@comm -23 new_files.txt existing_files.txt > new_files_to_add.txt
-# 	while read file; do \
-# 		echo "SRCS += $$file" >> Makefile; \
-# 		echo "OBJS += $${file/.c/.o}" >> Makefile; \
-# 	done < new_files_to_add.txt
-# 	@rm new_files.txt existing_files.txt new_files_to_add.txt
+info:
+	@printf "# ------------------------------------------------------------ #\n"
+	@printf "UNAME		:	$(UNAME)\n"
+	@printf "NUMPROC		:	$(NUMPROC)\n"
+	@printf "MAKEFLAGS	:	$(MAKEFLAGS)\n"
+	@printf "NAME		:	$(NAME)\n"
+	@printf "CC		:	$(CC)\n"
+	@printf "CFLAGS		:	$(CFLAGS)\n"
+	@printf "LDFLAGS		:	$(LDFLAGS)\n"
+	@printf "LIBX		:	$(LIBX)\n"
+	@printf "texture files	:\n	$(TEXTTURE_FILES)\n"
+	@printf "SRC:\n	$(SRC)\n"
+#	@printf "OBJ:\n	$(OBJ)\n"
+	@printf "# ------------------------------------------------------------ #\n"
 
-# SRCS += src/cub3d.c
-# SRCS += src/cub3d.c
-# SRCS += src/cub3d.c
+debug:
+
+scan:
+	@$(shell scan-build make)
