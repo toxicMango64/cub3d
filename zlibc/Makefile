@@ -12,7 +12,7 @@
 
 NAME	:=	libft.a
 CC		:=	cc
-CFLAGS	:=	-Wall -Wextra -Werror
+CFLAGS	:=	-Wall -Wextra -Werror -g3 -O2 -fsanitize=address
 # LDFLAGS	:=	-g3 -O2 -fsanitize=address
 ifeq ($(shell uname -s), Linux)
 	CFLAGS += -D LINUX -Wno-unused-result

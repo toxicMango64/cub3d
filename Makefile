@@ -30,6 +30,7 @@ endif
 #   Project based configuration
 # **************************************************************************** #
 CFLAGS		+=	-Wall -Wextra -Werror -Ofast -Iinc
+CFLAGS		+=	-g3 -fsanitize=address
 LDFLAGS		+=	-L$(LIBC_DIR) -lft
 
 LIBC_DIR	=	zlibc
@@ -57,6 +58,9 @@ SRC			=	$(SRCDIR)/cub3d.c \
 
 .PHONY: all clean fclean re info debug
 
+all: MAKEFLAGS	+=	-j$(NUMPROC)
+all: $(NAME) info
+
 # Compile object files
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -65,16 +69,15 @@ SRC			=	$(SRCDIR)/cub3d.c \
 OBJ		=	$(SRC:.c=.o)
 
 $(LIBX):
-	@make -C $(LIBX_DIR)
+	@make -sC $(LIBX_DIR)
 
 $(LIBC):
-	@make -C $(LIBC_DIR)
+	@make -sC utils
+	@make -sC $(LIBC_DIR)
 
 $(NAME): $(OBJ) $(LIBC)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(LIBC) $(OBJ) -o $(NAME)
-
-all: MAKEFLAGS	+=	-j$(NUMPROC)
-all: $(NAME) info
+	@echo "build cflags: $(CFLAGS)"
+	$(CC) $(CFLAGS) $(LDFLAGS) $(LIBC) utils/utils.a $(OBJ) -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)
@@ -98,7 +101,6 @@ info:
 	@printf "LIBX		:	$(LIBX)\n"
 	@printf "texture files	:\n	$(TEXTTURE_FILES)\n"
 	@printf "SRC:\n	$(SRC)\n"
-#	@printf "OBJ:\n	$(OBJ)\n"
 	@printf "# ------------------------------------------------------------ #\n"
 
 debug:

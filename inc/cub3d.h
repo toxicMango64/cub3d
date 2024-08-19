@@ -4,12 +4,21 @@
 # define TRUE 1
 # define FALSE 0
 
+# define F	'F'
+# define C	'C'
+# define NO	'NO'
+# define SO	'SO'
+# define WE	'WE'
+# define EA	'EA'
+# define WHITESPACES	" \v\t\f\r\n"
+
 # ifdef __linux__
 #  include <linux/limits.h>
 # else
 #  include <limits.h>
 # endif
 # include "../zlibc/libft.h"
+# include "../utils/utils.h"
 # include "struct.h"
 # include <unistd.h>
 # include <fcntl.h>

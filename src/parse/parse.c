@@ -1,6 +1,6 @@
 #include "../../inc/cub3d.h"
 
-void	game_signature_check(char *path_to_map)
+void	map_signature_check(char *path_to_map)
 {
 	int		fd;
 	ssize_t	offset;
@@ -14,92 +14,80 @@ void	game_signature_check(char *path_to_map)
 	if (fd == -1)
 		perr ("open: fd is not valid", -1);
 	close(fd);
-	ft_printf("{%s}\n", path_to_map);
-	ft_printf("{%s}\n", path_to_map);
+}
+
+void	is_map(char **map_grid, char *line)
+{
+	ssize_t			i = -1;
+	static ssize_t	offset;
+	static ssize_t	capacity;
+	char			**new_map_grid;
+
+	if (map_grid == NULL)
+	{
+		capacity = 1;
+		map_grid = (char **) malloc(capacity * sizeof(char *));
+		if (map_grid == NULL)
+			return ;
+	}
+	if (offset >= capacity)
+	{
+		new_map_grid = (char **) malloc((capacity * 2) * sizeof(char *));
+		if (new_map_grid == NULL)
+			return ;
+		while (++i < offset)
+			new_map_grid[i] = map_grid[i];
+		free(map_grid);
+		map_grid = new_map_grid;
+		capacity *= 2;
+	}
+	map_grid[offset] = line;
+	printf("map grid: {%zi}\t%s", offset, map_grid[offset]);
+	offset++;
+}
+
+void	read_color_scheme(t_colorscheme *scheme, char **grid, int fd)
+{
+	char			*line;
+
+	line = ft_strtrim(get_next_line(fd), WHITESPACES);
+	while (line && printf("while loop: {%s}\n", line)) // remove debug printf
+	{
+		if (strncmp(line, "NO", strlen("NO")) == 0)
+			scheme->no = ft_strtrim(line, "NO ");
+		else if (strncmp(line, "EA", strlen("EA")) == 0)
+			scheme->ea = ft_strtrim(line, "EA ");
+		else if (strncmp(line, "WE", strlen("WE")) == 0)
+			scheme->we = ft_strtrim(line, "WE ");
+		else if (strncmp(line, "SO", strlen("SO")) == 0)
+			scheme->so = ft_strtrim(line, "SO ");
+		else if (strncmp(line, "F", strlen("F")) == 0)
+			scheme->f = ft_strtrim(line, "F ");
+		else if (strncmp(line, "C", strlen("C")) == 0)
+			scheme->c = ft_strtrim(line, "C ");
+		else if (line[0] && !strpbrk(line, WHITESPACES))
+			is_map(grid, line);
+		free (line);
+
+		line = get_next_line(fd);
+		while (!strpbrk(line, WHITESPACES))
+		{
+			free (line);
+			line = get_next_line(fd);
+			printf("strpbrk line: {%s}\n\n", line);
+		}
+		line = ft_strtrim(line, WHITESPACES);
+	}
 }
 
 void	validate_map(char *path_to_map, t_soul_catcher *game)
 {
-	// int	fd;
+	int	fd;
 
-	(void)game;
-	game_signature_check(path_to_map);
-	// fd = open(path_to_map, O_RDONLY);
-	// game->height = get_map_height(path_to_map);
-	// close(fd);
-	// fd = open(path_to_map, O_RDONLY);
-	// get_map(fd, game);
-	// close(fd);
-	// game->width = ft_stlen(game->map[0]);
-	// if (game->width > 43)
-	// {
-	// 	free_char_arr(game->map, game->height);
-	// 	free_char_arr(game->temp_map, game->height);
-	// 	perr ("Map not valid", 5);
-	// }
+	map_signature_check(path_to_map);
+	fd = open(path_to_map, O_RDONLY);
+	if (fd == -1)
+		perr ("open: fd is not valid", -1);
+	read_color_scheme(game->scheme, game->map->grid, fd);
+	close(fd);
 }
-
-/* -------------------------------------------------------------------------- */
-
-// t_map	parse_map_file(char *filename)
-// {
-// 	t_map	*map;
-// 	// FILE	*file = fopen(filename, "r");
-// 	int		file = open(filename, "r");
-// 	char	line[1024];
-
-// 	while (fgets(line, 1024, file))
-// 	{
-// 		if (line[0] == '1' || line[0] == '0' || line[0] == 'N' || line[0] == 'S'
-// 			|| line[0] == 'E' || line[0] == 'W')
-// 		{
-// 			map->grid = parse_map_grid(line, &map->width, &map->height);
-// 			if (!map->grid)
-// 				return (printf("Error parsing map grid\n"), (t_map){0});
-// 		}
-// 		else if (strncmp(line, "NO ", 3) == 0)
-// 			map->north_texture = parse_texture(line);
-// 		else if (strncmp(line, "SO ", 3) == 0)
-// 			map->south_texture = parse_texture(line);
-// 		else if (strncmp(line, "WE ", 3) == 0)
-// 			map->west_texture = parse_texture(line);
-// 		else if (strncmp(line, "EA ", 3) == 0)
-// 			map->east_texture = parse_texture(line);
-// 		else if (strncmp(line, "F ", 2) == 0)
-// 			map->floor_color = parse_color(line);
-// 		else if (strncmp(line, "C ", 2) == 0)
-// 			map->ceiling_color = parse_color(line);
-// 	}
-// 	return (close(file), map);
-// }
-
-// void handle_events(t_soul_catcher *game)
-// {
-// 	int	mouse_x;
-// 	int	mouse_y;
-
-// 	if (mlx_is_key_down(MLX_KEY_W))
-// 		game->move_forward = 1;
-// 	if (mlx_is_key_down(MLX_KEY_S))
-// 		game->move_backward = 1;
-// 	if (mlx_is_key_down(MLX_KEY_A))
-// 		game->turn_left = 1;
-// 	if (mlx_is_key_down(MLX_KEY_D))
-// 		game->turn_right = 1;
-// 	if (mlx_is_key_down(MLX_KEY_ESC))
-// 		exit(0);
-// 	mlx_get_mouse_pos(&mouse_x, &mouse_y);
-// 	game->mouse_x = mouse_x;
-// 	game->mouse_y = mouse_y;
-// 	if (mlx_is_mouse_down(MLX_MOUSE_BUTTON_LEFT))
-// 		game->turn_left = 1;
-// 	if (mlx_is_mouse_down(MLX_MOUSE_BUTTON_RIGHT))
-// 		game->turn_right = 1;
-// 	if (mlx_is_window_resized())
-// 	{
-// 		game->window_width = mlx_get_window_width();
-// 		game->window_height = mlx_get_window_height();
-// 	}
-// 	if (mlx_is_window_closed())
-// 		exit(0);
-// }
