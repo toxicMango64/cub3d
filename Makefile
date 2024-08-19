@@ -56,10 +56,13 @@ SRC			=	$(SRCDIR)/cub3d.c \
 #				$(GFXDIR)/gfx.c
 #				$(UTILSDIR)/utils.c
 
+# --------------------------------------------------------------------------- #"
+
 .PHONY: all clean fclean re info debug
 
 all: MAKEFLAGS	+=	-j$(NUMPROC)
 all: $(NAME) info
+## all: builds the project
 
 # Compile object files
 %.o: %.c
@@ -80,16 +83,20 @@ $(NAME): $(OBJ) $(LIBC)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LIBC) utils/utils.a $(OBJ) -o $(NAME)
 
 clean:
+## clean: cleans all the obj files
 	$(RM) $(OBJ)
 
 fclean: clean
+## fclean: uses the rule clean and removes the obsolete files
 	$(RM) $(NAME)
 	@make -C $(LIBC_DIR) fclean
 	@make -C $(LIBX_DIR) clean
 
 re: fclean all
+## re: does fclean and all
 
 info:
+## info: prints project based info
 	@printf "# ------------------------------------------------------------ #\n"
 	@printf "UNAME		:	$(UNAME)\n"
 	@printf "NUMPROC		:	$(NUMPROC)\n"
@@ -107,3 +114,8 @@ debug:
 
 scan:
 	@$(shell scan-build make)
+
+help:
+## help: prints a list of the possible commands
+	@echo "Usage: \n"
+	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
