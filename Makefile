@@ -138,6 +138,7 @@ info: ## prints project based info
 	@echo "${LIGHT_GREEN}CC${RESET}		:	${LIGHT_MAGENTA}${CC}${RESET}"
 	@echo "${LIGHT_GREEN}CFLAGS${RESET}		:	${LIGHT_MAGENTA}${CFLAGS}${RESET}"
 	@echo "${LIGHT_GREEN}LDFLAGS${RESET}		:	${LIGHT_MAGENTA}${LDFLAGS}${RESET}"
+	@echo "${LIGHT_GREEN}CPPFLAGS${RESET}	:	${LIGHT_MAGENTA}${CPPFLAGS}${RESET}"
 	@echo "${LIGHT_GREEN}LIBX${RESET}		:	${LIGHT_MAGENTA}${LIBX}${RESET}"
 	@echo "${LIGHT_GREEN}UNAME${RESET}		:	${LIGHT_MAGENTA}${UNAME}${RESET}"
 	@echo "${LIGHT_GREEN}NUMPROC${RESET}		:	${LIGHT_MAGENTA}${NUMPROC}${RESET}"
@@ -146,16 +147,19 @@ info: ## prints project based info
 	@echo "${LIGHT_GREEN}SRC${RESET}		:\n	${LIGHT_BLUE}${SRC}${RESET}"
 	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 
-debug:
+debug: ## add your debug flags before calling all rule
+	CFLAGS	+=	-g3 -fsanitize=address --analyzer
 
-scan:
+scan: ## uses scan-build on make all (prerequisite clan-18)
 	@$(shell scan-build-18 $(MAKE))
 
 run: ## runs a test case for you "./cub3D maps/map.cub"
+	@$(shell ./cub3D maps/map.cub)
 
 help: ## prints a list of the possible commands
 	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 	@echo "${LIGHT_MAGENTA}Usage:${RESET}"
 #	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "${LIGHT_GREEN}%-30s ${LIGHT_BLUE}%s${RESET}\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
+	{printf "${LIGHT_GREEN}%-20s ${LIGHT_BLUE}%s${RESET}\n", $$1, $$2}'
 	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
