@@ -154,6 +154,8 @@ scan:
 run: ## runs a test case for you "./cub3D maps/map.cub"
 
 help: ## prints a list of the possible commands
+	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 	@echo "${LIGHT_MAGENTA}Usage:${RESET}"
 #	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "${LIGHT_GREEN}%-30s ${LIGHT_BLUE}%s${RESET}\n", $$1, $$2}'
+	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
