@@ -1,0 +1,1 @@
+cc -Wall -Wextra -Werror -g3 -o test ../utils/utils.a ../zlibc/libft.a $1

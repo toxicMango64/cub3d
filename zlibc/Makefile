@@ -12,7 +12,7 @@
 
 NAME	:=	libft.a
 CC		:=	cc
-CFLAGS	:=	-Wall -Wextra -Werror -g3 -O2 -fsanitize=address
+CFLAGS	:=	-Wall -Wextra -Werror -O3
 # LDFLAGS	:=	-g3 -O2 -fsanitize=address
 ifeq ($(shell uname -s), Linux)
 	CFLAGS += -D LINUX -Wno-unused-result
@@ -33,6 +33,7 @@ ft_printfdir	:=	./ft_printf
 memdir			:=	./mem
 stringdir		:=	./string
 stringsdir		:=	./strings
+lstdir			:=	./lst
 
 CFILES			:=	$(asciidir)/atoll.c \
 					$(asciidir)/ft_atoi.c \
@@ -75,7 +76,16 @@ CFILES			:=	$(asciidir)/atoll.c \
 					$(stringdir)/ft_substr.c \
 					$(stringdir)/ft_tolower.c \
 					$(stringdir)/ft_toupper.c \
-					$(stringdir)/strcmp_sst.c
+					$(stringdir)/strcmp_sst.c \
+					$(lstdir)/ft_lstadd_back.c \
+					$(lstdir)/ft_lstadd_front.c \
+					$(lstdir)/ft_lstclear.c \
+					$(lstdir)/ft_lstdelone.c \
+					$(lstdir)/ft_lstiter.c \
+					$(lstdir)/ft_lstlast.c \
+					$(lstdir)/ft_lstmap.c \
+					$(lstdir)/ft_lstnew.c \
+					$(lstdir)/ft_lstsize.c
 
 ODIR	:=	zobjdir
 OBJS	:=	$(CFILES:%.c=$(ODIR)/%.o)
@@ -84,19 +94,33 @@ OBJS	:=	$(CFILES:%.c=$(ODIR)/%.o)
 
 ifeq ($(UNAME), Linux)
 	NUMPROC := $(shell grep -c ^processor /proc/cpuinfo)
+	@echo $(NUMPROC)
 else ifeq ($(UNAME), Darwin)
 	NUMPROC := $(shell sysctl -n hw.ncpu)
+	@echo $(NUMPROC)
 endif
 
-all: 
-	@$(MAKE) -j$(NUMPROC) $(NAME)
+# all:
+# ifeq ($(NUMPROC),)
+# 	@echo $(NUMPROC)
+# 	$(MAKE) -j$(NUMPROC) $(NAME)
+# else
+# 	@echo "NUMPROC is empty"
+# 	$(MAKE) $(NAME)
+# endif
 
+all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
+all:: $(NAME)
+
+
+# Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 $(ODIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@echo "target: $@\t\tprereq: $<"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(ODIR)
-	ar -rcs $(NAME) $(OBJS)
+	@ar -rcs $(NAME) $(OBJS)
 
 clean:
 	@$(RM) $(OBJS)
@@ -106,24 +130,17 @@ fclean: clean
 
 re: fclean all
 
-$(NAME): $(CFILES)
-
-$(OFILES): $(CFILES)
-
-$(RM): $(OFILES)
-
 info: MAKEFLAGS	+=	-j$(NUMPROC)
 info:
-	@printf "# ------------------------------------------------------------ #\n"
-	@printf "UNAME		:	$(UNAME)\n"
-	@printf "NUMPROC		:	$(NUMPROC)\n"
-	@printf "MAKEFLAGS	:	$(MAKEFLAGS)\n"
-	@printf "NAME		:	$(NAME)\n"
-	@printf "CC		:	$(CC)\n"
-	@printf "CFLAGS		:	$(CFLAGS)\n"
-	@printf "LDFLAGS		:	$(LDFLAGS)\n"
-	@printf "LIBX		:	$(LIBX)\n"
-	@printf "texture files	:\n	$(TEXTTURE_FILES)\n"
-	@printf "SRC:\n	$(shell ls ./*)\n"
-	@printf "OBJ:\n	$(OBJ)\n"
-	@printf "# ------------------------------------------------------------ #\n"
+	@echo "# ---------------------------------------------------------------- #"
+	@echo "UNAME		:	$(UNAME)"
+	@echo "NUMPROC		:	$(NUMPROC)"
+	@echo "MAKEFLAGS	:	$(MAKEFLAGS)"
+	@echo "NAME		:	$(NAME)"
+	@echo "CC		:	$(CC)"
+	@echo "CFLAGS		:	$(CFLAGS)"
+	@echo "LDFLAGS		:	$(LDFLAGS)"
+	@echo "LIBX		:	$(LIBX)"
+	@echo "texture files	:\n	$(TEXTTURE_FILES)"
+	@echo "SRC:\n	$(shell ls ./*)"
+	@echo "# ---------------------------------------------------------------- #"

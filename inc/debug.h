@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   struct.h                                           :+:      :+:    :+:   */
+/*   debug.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,55 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCT_H
-# define STRUCT_H
+#ifndef DEBUG_H
+# define DEBUG_H
 
-# include "../zlibc/libft.h"
+# include "struct.h"
 
-/** STRUCTURES **/
-typedef struct s_game			t_soul_catcher;
-typedef struct s_map			t_map;
-typedef struct s_mlx			t_mlx;
-typedef struct s_point			t_point;
-
-struct	s_point
-{
-	int	x;
-	int	y;
-};
-
-struct	s_map
-{
-	int			fd;
-	int			width;
-	int			height;
-	int			floor_color[3];
-	int			ceiling_color[3];
-	char		**grid;
-	char		*texture[7];
-	t_point		*player_pos;
-};
-
-/**
- * mx mouse x cordinates
- * my mouse y cordinates
- */
-struct	s_mlx
-{
-	int				win_w;
-	int				win_h;
-	int				mx;
-	int				my;
-	int				forward;
-	int				backward;
-	int				left;
-	int				right;
-};
-
-struct	s_game
-{
-	t_mlx	*mlx;
-	t_map	*map;
-};
+void	printconent(t_soul_catcher *game);
 
 #endif

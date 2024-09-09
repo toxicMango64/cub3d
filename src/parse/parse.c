@@ -1,5 +1,7 @@
 #include "../../inc/cub3d.h"
 
+// tar: Error opening archive: Error reading 'maps'
+
 void	map_signature_check(char *path_to_map)
 {
 	int		fd;
@@ -12,82 +14,41 @@ void	map_signature_check(char *path_to_map)
 		perr ("cub3d: unknown suffix -- ignored", 2);
 	fd = open(path_to_map, O_RDONLY);
 	if (fd == -1)
-		perr ("open: fd is not valid", -1);
+		perr ("cub3d: Error opening file: Error reading 'map'", -1);
 	close(fd);
 }
 
-void	is_map(char **map_grid, char *line)
+void	extractfile(t_soul_catcher *game, int fd)
 {
-	ssize_t			i = -1;
-	static ssize_t	offset;
-	static ssize_t	capacity;
-	char			**new_map_grid;
+	char	*line;
+	char	*t_ids[7];
 
-	if (map_grid == NULL)
+	set_texture_ids(t_ids);
+	line = ft_strdup("");
+	while (line)
 	{
-		capacity = 1;
-		map_grid = (char **) malloc(capacity * sizeof(char *));
-		if (map_grid == NULL)
-			return ;
-	}
-	if (offset >= capacity)
-	{
-		new_map_grid = (char **) malloc((capacity * 2) * sizeof(char *));
-		if (new_map_grid == NULL)
-			return ;
-		while (++i < offset)
-			new_map_grid[i] = map_grid[i];
-		free(map_grid);
-		map_grid = new_map_grid;
-		capacity *= 2;
-	}
-	map_grid[offset] = line;
-	printf("map grid: {%zi}\t%s", offset, map_grid[offset]);
-	offset++;
-}
-
-void	read_color_scheme(t_colorscheme *scheme, char **grid, int fd)
-{
-	char			*line;
-
-	line = ft_strtrim(get_next_line(fd), WHITESPACES);
-	while (line && printf("while loop: {%s}\n", line)) // remove debug printf
-	{
-		if (strncmp(line, "NO", strlen("NO")) == 0)
-			scheme->no = ft_strtrim(line, "NO ");
-		else if (strncmp(line, "EA", strlen("EA")) == 0)
-			scheme->ea = ft_strtrim(line, "EA ");
-		else if (strncmp(line, "WE", strlen("WE")) == 0)
-			scheme->we = ft_strtrim(line, "WE ");
-		else if (strncmp(line, "SO", strlen("SO")) == 0)
-			scheme->so = ft_strtrim(line, "SO ");
-		else if (strncmp(line, "F", strlen("F")) == 0)
-			scheme->f = ft_strtrim(line, "F ");
-		else if (strncmp(line, "C", strlen("C")) == 0)
-			scheme->c = ft_strtrim(line, "C ");
-		else if (line[0] && !strpbrk(line, WHITESPACES))
-			is_map(grid, line);
-		free (line);
-
+		free(line);
 		line = get_next_line(fd);
-		while (!strpbrk(line, WHITESPACES))
+		if (!line)
+			break ;
+		if (line[0] && line[0] != '\n')
 		{
-			free (line);
-			line = get_next_line(fd);
-			printf("strpbrk line: {%s}\n\n", line);
+			if (set_game_data(line, game, t_ids))
+				return (free(line), EXIT_FAILURE);
+			free(line);
+			line = ft_strdup("");
 		}
-		line = ft_strtrim(line, WHITESPACES);
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	validate_map(char *path_to_map, t_soul_catcher *game)
+int	validate_map(char *path_to_map, t_soul_catcher *game)
 {
 	int	fd;
 
 	map_signature_check(path_to_map);
 	fd = open(path_to_map, O_RDONLY);
-	if (fd == -1)
-		perr ("open: fd is not valid", -1);
-	read_color_scheme(game->scheme, game->map->grid, fd);
-	close(fd);
+	(extractfile(game, fd), close(fd));
+	printconent(game);
+	return (EXIT_SUCCESS);
 }
