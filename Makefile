@@ -33,7 +33,7 @@ endif
 # **************************************************************************** #
 #   Project based configuration
 # **************************************************************************** #
-CPPFLAGS	+=	-g3 -fsanitize=address
+# CPPFLAGS	+=	-g3 -fsanitize=address
 LDFLAGS		+=	-L$(LIBC_DIR) -lft
 
 LIBC_DIR	=	zlibc
@@ -54,42 +54,44 @@ DEBUGDIR	=	$(SRCDIR)/debug
 PARSEDIR	=	$(SRCDIR)/parse
 
 # Source files
-SRC			=	$(SRCDIR)/cub3d.c \
-				$(PARSEDIR)/parse.c \
-				$(UTILSDIR)/init_cub3d.c \
-				$(DEBUGDIR)/print_debug.c
+SRC			=	${shell find . -regex '.+\.c$$' | grep "src"}
+
+# SRC			=	$(SRCDIR)/cub3d.c
+# 				$(PARSEDIR)/parse.c
+# 				$(UTILSDIR)/init_cub3d.c
+# 				$(DEBUGDIR)/print_debug.c
 #				$(GFXDIR)/gfx.c
 #				$(UTILSDIR)/utils.c
 
 # **************************************************************************** #
 # Define the colors
 # **************************************************************************** #
-GB				:=	\033[42m
-RESET			:=	\033[0m
-RED				:=	\033[0;31m
-WHITE			:=	\033[0;97m
-BLUE			:=	\033[0;34m
-GRAY			:=	\033[0;90m
-CYAN			:=	\033[0;36m
-BLACK			:=	\033[0;30m
-GREEN			:=	\033[0;32m
-YELLOW			:=	\033[0;33m
-MAGENTA			:=	\033[0;35m
-BLUE			:=	\033[0;36m
-LIGHT_RED		:=	\033[0;91m
-LIGHT_GRAY		:=	\033[0;37m
-LIGHT_BLUE		:=	\033[0;94m
-LIGHT_CYAN		:=	\033[0;96m
-LIGHT_GREEN		:=	\033[0;92m
-LIGHT_YELLOW	:=	\033[0;93m
-LIGHT_MAGENTA	:=	\033[0;95m
+GB			:=	\033[42m
+RESET		:=	\033[0m
+RED			:=	\033[0;31m
+WHITE		:=	\033[0;97m
+BLUE		:=	\033[0;34m
+GRAY		:=	\033[0;90m
+CYAN		:=	\033[0;36m
+BLACK		:=	\033[0;30m
+GREEN		:=	\033[0;32m
+YELLOW		:=	\033[0;33m
+MAGENTA		:=	\033[0;35m
+BLUE		:=	\033[0;36m
+L_RED		:=	\033[0;91m
+L_GRAY		:=	\033[0;37m
+L_BLUE		:=	\033[0;94m
+L_CYAN		:=	\033[0;96m
+L_GREEN		:=	\033[0;92m
+L_YELLOW	:=	\033[0;93m
+L_MAGENTA	:=	\033[0;95m
 
 # --------------------------------------------------------------------------- #"
 
-.PHONY: all clean fclean re info debug scan help checktexture
+.PHONY: all clean fclean re info debug scan help checktexture norm
 
 all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
-all:: $(checktexture) $(NAME) info
+all:: checktexture $(NAME) info
 
 # Define a pattern rule that compiles every .c file into a .o file
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
@@ -132,20 +134,26 @@ fclean: clean ## uses the rule clean and removes the obsolete files
 
 re: fclean all ## does fclean and all
 
+NORMFILES	+=	 ${shell find . -regex '.+\.c$$' -o -regex '.+\.h$$' | grep -v "minilibx"}
+
+norm: ## norm for .c/.h files excluding mlx files
+	@norminette -d $(NORMFILES)
+	@echo "all good soilder!"
+
 info: ## prints project based info
-	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
-	@echo "${LIGHT_GREEN}NAME${RESET}		:	${LIGHT_MAGENTA}${NAME}${RESET}"
-	@echo "${LIGHT_GREEN}CC${RESET}		:	${LIGHT_MAGENTA}${CC}${RESET}"
-	@echo "${LIGHT_GREEN}CFLAGS${RESET}		:	${LIGHT_MAGENTA}${CFLAGS}${RESET}"
-	@echo "${LIGHT_GREEN}LDFLAGS${RESET}		:	${LIGHT_MAGENTA}${LDFLAGS}${RESET}"
-	@echo "${LIGHT_GREEN}CPPFLAGS${RESET}	:	${LIGHT_MAGENTA}${CPPFLAGS}${RESET}"
-	@echo "${LIGHT_GREEN}LIBX${RESET}		:	${LIGHT_MAGENTA}${LIBX}${RESET}"
-	@echo "${LIGHT_GREEN}UNAME${RESET}		:	${LIGHT_MAGENTA}${UNAME}${RESET}"
-	@echo "${LIGHT_GREEN}NUMPROC${RESET}		:	${LIGHT_MAGENTA}${NUMPROC}${RESET}"
-	@echo "${LIGHT_GREEN}MAKEFLAGS${RESET}	:	${LIGHT_MAGENTA}${MAKEFLAGS}${RESET}"
-	@echo "${LIGHT_GREEN}texture files${RESET}	:\n	${LIGHT_BLUE}${TEXTTURE_FILES}${RESET}"
-	@echo "${LIGHT_GREEN}SRC${RESET}		:\n	${LIGHT_BLUE}${SRC}${RESET}"
-	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
+	@echo "${L_GREEN}NAME${RESET}		:	${L_MAGENTA}${NAME}${RESET}"
+	@echo "${L_GREEN}CC${RESET}		:	${L_MAGENTA}${CC}${RESET}"
+	@echo "${L_GREEN}CFLAGS${RESET}		:	${L_MAGENTA}${CFLAGS}${RESET}"
+	@echo "${L_GREEN}LDFLAGS${RESET}		:	${L_MAGENTA}${LDFLAGS}${RESET}"
+	@echo "${L_GREEN}CPPFLAGS${RESET}	:	${L_MAGENTA}${CPPFLAGS}${RESET}"
+	@echo "${L_GREEN}LIBX${RESET}		:	${L_MAGENTA}${LIBX}${RESET}"
+	@echo "${L_GREEN}UNAME${RESET}		:	${L_MAGENTA}${UNAME}${RESET}"
+	@echo "${L_GREEN}NUMPROC${RESET}		:	${L_MAGENTA}${NUMPROC}${RESET}"
+	@echo "${L_GREEN}MAKEFLAGS${RESET}	:	${L_MAGENTA}${MAKEFLAGS}${RESET}"
+	@echo "${L_GREEN}texture files${RESET}	:\n	${L_BLUE}${TEXTTURE_FILES}${RESET}"
+	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${SRC}${RESET}"
+	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
 
 debug: ## add your debug flags before calling all rule
 	CFLAGS	+=	-g3 -fsanitize=address --analyzer
