@@ -1,23 +1,91 @@
-name: C/C++ CI
+######## new version ########
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+# name: C/C++ CI
 
-jobs:
-  build:
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v4
+
+#     - name: Set up build environment
+#       run: sudo apt-get update && sudo apt-get install -y \
+#         autoconf automake libtool \
+#         gcc g++ make \
+#         libx11-dev libxext-dev \
+#         clang-tools  # for scan-build
+
+#     - name: Cache dependencies
+#       uses: actions/cache@v3
+#       with:
+#         path: |
+#           ~/.cache
+#         key: ${{ runner.os }}-build-${{ github.sha }}
+#         restore-keys: |
+#           ${{ runner.os }}-build-
+
+#     - name: Build
+#       run: make
+
+#     - name: Check Textures
+#       run: make checktexture
+
+#     - name: Run Tests
+#       run: make run
+
+#     - name: Upload build logs
+#       uses: actions/upload-artifact@v3
+#       with:
+#         name: build-logs
+#         path: build.log
+
+#     - name: Upload test results
+#       uses: actions/upload-artifact@v3
+#       with:
+#         name: test-results
+#         path: test-results/
+
+#     - name: Debug Build (Optional)
+#       if: ${{ github.event_name == 'push' }}
+#       run: |
+#         sed -i 's/CFLAGS += -Wall -Wextra -Werror -Ofast/CFLAGS += -Wall -Wextra -Werror -Ofast -g3 -fsanitize=address/' Makefile
+#         make clean
+#         make
+
+#     - name: Static Analysis (Optional)
+#       run: |
+#         scan-build-18 make
+
+######## old version ########
+
+# name: C/C++ CI
+
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+# jobs:
+#   build:
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - uses: actions/checkout@v4
+#     - name: configure
+#       run: ./configure
+#     - name: make
+#       run: make
+#     - name: make check
+#       run: make check
+#     - name: make distcheck
+#       run: make distcheck
