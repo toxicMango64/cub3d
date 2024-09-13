@@ -23,10 +23,13 @@ endif
 # **************************************************************************** #
 ifeq ($(UNAME), Linux)
 	LIBX_DIR	+=	minilibx/linux
+	MLXFLG		:=	-lXext -lX11
 	CPPFLAGS	+=	-D LINUX -Wno-unused-result
 	NUMPROC		:=	$(shell grep -c ^processor /proc/cpuinfo)
 else ifeq ($(UNAME), Darwin)
 	LIBX_DIR	+=	minilibx/opengl
+	MLXFLG		:=	-framework OpenGL -framework Appkit
+	CPPFLAGS	+=	-DSTRINGPUTX11
 	NUMPROC		:= $(shell sysctl -n hw.ncpu)
 endif
 
@@ -41,11 +44,11 @@ LIBC		=	$(LIBC_DIR)/libft.a \
 				utils/utils.a
 LIBX		=	$(LIBX_DIR)/libmlx.a
 
-TEXTTURE_DIR	=	texture
-TEXTTURE_FILES	=	$(TEXTTURE_DIR)/east_texture \
-					$(TEXTTURE_DIR)/north_texture \
-					$(TEXTTURE_DIR)/south_texture \
-					$(TEXTTURE_DIR)/west_texture
+TEXTURE_DIR		=	texture
+TEXTURE_FILES	=	$(TEXTURE_DIR)/east_texture \
+					$(TEXTURE_DIR)/north_texture \
+					$(TEXTURE_DIR)/south_texture \
+					$(TEXTURE_DIR)/west_texture
 
 SRCDIR		=	src
 GFXDIR		=	$(SRCDIR)/gfx
@@ -111,7 +114,7 @@ $(LIBC):
 
 $(NAME): $(OBJ) $(LIBC)
 	@echo "build cflags: $(CFLAGS)"
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LIBC) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(LIBC) $(OBJ) -o $(NAME)
 
 TEXTURES = east north south west
 
@@ -170,4 +173,12 @@ help: ## prints a list of the possible commands
 #	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
 	{printf "${LIGHT_GREEN}%-20s ${LIGHT_BLUE}%s${RESET}\n", $$1, $$2}'
+	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+
+.DEFAULT:
+	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+	@echo "${LIGHT_RED}[Error]:${RESET} ${LIGHT_BLUE}\tUnknown target '$@'."
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
+	{printf "${LIGHT_GREEN}%-15s ${LIGHT_BLUE}%s${RESET}\n", $$1, $$2}'
 	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"

@@ -45,14 +45,14 @@ struct	s_map
  */
 struct	s_mlx
 {
-	int				win_w;
-	int				win_h;
-	int				mx;
-	int				my;
-	int				forward;
-	int				backward;
-	int				left;
-	int				right;
+	int	*p_mlx;
+	int	*p_win;
+	int	mx;
+	int	my;
+	int	forward;
+	int	backward;
+	int	left;
+	int	right;
 };
 
 struct	s_game

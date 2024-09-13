@@ -10,6 +10,15 @@ int	parse(int ac, char **av, t_soul_catcher *game)
 	return (EXIT_SUCCESS);
 }
 
+// int	gfx_setup(t_soul_catcher *game)
+// {
+// 	game->mlx->p_mlx = mlx_init();
+// 	game->mlx->p_win = mlx_new_window(game->mlx->p_mlx, 1280, 720, "cub3D");
+// 	mlx_hook(game->mlx->p_win, 17, 1L << 2, handle_destroy, &game);
+// 	mlx_hook(game->mlx->p_win, 2, 1L << 0, handle_keypress, &game);
+// 	mlx_loop(game->mlx->p_mlx);
+// }
+
 int	main(const int ac, const char * const *av)
 {
 	t_soul_catcher	game;
@@ -19,6 +28,9 @@ int	main(const int ac, const char * const *av)
 		return (EXIT_FAILURE);
 	if (parse(ac, av, &game))
 		return (EXIT_FAILURE);
+	// if (gfx_setup(ac, av, &game))
+	// 	return (EXIT_FAILURE);
+	// while (1) ;
 	return (0);
 }
 
