@@ -1,6 +1,6 @@
 #include "../inc/cub3d.h"
 
-int	parse(int ac, char **av, t_soul_catcher *game)
+int	parse(const int ac, const char * const *av, t_soul_catcher *game)
 {
 	if (ac != 2)
 		return (printf("Usage: %s <map_file>\n", av[0]), 1);
@@ -24,8 +24,8 @@ int	main(const int ac, const char * const *av)
 	t_soul_catcher	game;
 
 	game.map = malloc(sizeof(t_map));
-	if (initgame(ac, av, &game))
-		return (EXIT_FAILURE);
+	// if (initgame(ac, av, &game))
+	// 	return (EXIT_FAILURE);
 	if (parse(ac, av, &game))
 		return (EXIT_FAILURE);
 	// if (gfx_setup(ac, av, &game))

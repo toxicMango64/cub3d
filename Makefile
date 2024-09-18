@@ -57,7 +57,12 @@ DEBUGDIR	=	$(SRCDIR)/debug
 PARSEDIR	=	$(SRCDIR)/parse
 
 # Source files
-SRC			=	${shell find . -regex '.+\.c$$' | grep "src"}
+ifeq ($(UNAME), Linux)
+	SRC		:=	${shell find . -regex '.+\.c$$' | grep "src"}
+else ifeq ($(UNAME), Darwin)
+	SRC		:=	${shell find -E . -regex '.+\.c' | grep "src"}
+endif
+# SRC			=	${shell find . -regex '.+\.c$$' | grep "src"}
 
 # SRC			=	$(SRCDIR)/cub3d.c
 # 				$(PARSEDIR)/parse.c
@@ -154,7 +159,7 @@ info: ## prints project based info
 	@echo "${L_GREEN}UNAME${RESET}		:	${L_MAGENTA}${UNAME}${RESET}"
 	@echo "${L_GREEN}NUMPROC${RESET}		:	${L_MAGENTA}${NUMPROC}${RESET}"
 	@echo "${L_GREEN}MAKEFLAGS${RESET}	:	${L_MAGENTA}${MAKEFLAGS}${RESET}"
-	@echo "${L_GREEN}texture files${RESET}	:\n	${L_BLUE}${TEXTTURE_FILES}${RESET}"
+	@echo "${L_GREEN}texture files${RESET}	:\n	${L_BLUE}${TEXTURE_FILES}${RESET}"
 	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${SRC}${RESET}"
 	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
 

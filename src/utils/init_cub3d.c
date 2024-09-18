@@ -19,7 +19,7 @@ char	**intit_texture(void)
 	return (t_id);
 }
 
-int	initgame(t_soul_catcher *game)
-{
+// int	initgame(t_soul_catcher *game)
+// {
 
-}
+// }

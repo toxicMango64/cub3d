@@ -33,7 +33,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 
-int		validate_map(char *path_to_map, t_soul_catcher *game);
+int		validate_map(const char *path_to_map, t_soul_catcher *game);
 char	**intit_texture(void);
 int		set_game_data(t_soul_catcher *game, char *line, char **t_ids);
 
