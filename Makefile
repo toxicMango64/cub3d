@@ -1,5 +1,5 @@
 # **************************************************************************** #
-# Makefile builtin approach
+#  Makefile builtin approach
 # **************************************************************************** #
 UNAME	=	$(shell uname -s)
 NAME	=	cub3d
@@ -19,7 +19,7 @@ else # linux or others
 endif
 
 # **************************************************************************** #
-#   SYSTEM SPECIFIC SETTINGS
+#  SYSTEM SPECIFIC SETTINGS
 # **************************************************************************** #
 ifeq ($(UNAME), Linux)
 	LIBX_DIR	+=	minilibx/linux
@@ -34,7 +34,7 @@ else ifeq ($(UNAME), Darwin)
 endif
 
 # **************************************************************************** #
-#   Project based configuration
+#  Project based configuration
 # **************************************************************************** #
 # CPPFLAGS	+=	-g3 -fsanitize=address
 LDFLAGS		+=	-L$(LIBC_DIR) -lft
