@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/08/16 16:26:49 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/19 05:06:13 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,49 +16,49 @@
 # include "../zlibc/libft.h"
 
 /** STRUCTURES **/
-typedef struct s_game			t_soul_catcher;
-typedef struct s_map			t_map;
-typedef struct s_mlx			t_mlx;
-typedef struct s_point			t_point;
-
-struct	s_point
+typedef struct	s_point
 {
 	int	x;
 	int	y;
-};
+}	t_point;
 
-struct	s_map
+typedef struct s_textures
 {
-	int			fd;
-	int			width;
-	int			height;
-	int			floor_color[3];
-	int			ceiling_color[3];
-	char		**grid;
-	char		*texture[7];
-	t_point		*player_pos;
-};
+	char	*north;
+	char	*east;
+	char	*west;
+	char	*south;
+	char	*floor;
+	char	*ceiling;
+}	t_textures;
 
-/**
- * mx mouse x cordinates
- * my mouse y cordinates
- */
-struct	s_mlx
+typedef struct	s_map
 {
-	int	*p_mlx;
-	int	*p_win;
-	int	mx;
-	int	my;
-	int	forward;
-	int	backward;
-	int	left;
-	int	right;
-};
+	int		fd;
+	int		floor_color[3];
+	int		ceiling_color[3];
+	int		width;
+	char	*full;
+	char	**grid;
+	t_point	*player_pos;
+}	t_map;
 
-struct	s_game
+typedef struct	s_game
 {
-	t_mlx	*mlx;
-	t_map	*map;
-};
+	int			*p_mlx;
+	int			*p_win;
+	t_map		*map;
+	t_textures	*textures;
+}	t_soul_catcher;
+
+typedef enum e_texture_types
+{
+	NORTH,
+	EAST,
+	WEST,
+	SOUTH,
+	FLOOR,
+	CEILING
+}	t_texture_type;
 
 #endif

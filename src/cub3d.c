@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
+/*   Updated: 2024/09/19 05:58:57 by myousaf          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/cub3d.h"
 
 int	parse(const int ac, const char * const *av, t_soul_catcher *game)
@@ -24,10 +36,10 @@ int	main(const int ac, const char * const *av)
 	t_soul_catcher	game;
 
 	game.map = malloc(sizeof(t_map));
-	// if (initgame(ac, av, &game))
-	// 	return (EXIT_FAILURE);
 	if (parse(ac, av, &game))
 		return (EXIT_FAILURE);
+	// if (initgame(ac, av, &game))
+	// 	return (EXIT_FAILURE);
 	// if (gfx_setup(ac, av, &game))
 	// 	return (EXIT_FAILURE);
 	// while (1) ;

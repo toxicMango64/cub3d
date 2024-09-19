@@ -18,8 +18,3 @@ char	**intit_texture(void)
 	static char *t_id[7] = {"NO", "EA", "WE", "SO", "F", "C", NULL};
 	return (t_id);
 }
-
-// int	initgame(t_soul_catcher *game)
-// {
-
-// }

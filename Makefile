@@ -62,14 +62,6 @@ ifeq ($(UNAME), Linux)
 else ifeq ($(UNAME), Darwin)
 	SRC		:=	${shell find -E . -regex '.+\.c' | grep "src"}
 endif
-# SRC			=	${shell find . -regex '.+\.c$$' | grep "src"}
-
-# SRC			=	$(SRCDIR)/cub3d.c
-# 				$(PARSEDIR)/parse.c
-# 				$(UTILSDIR)/init_cub3d.c
-# 				$(DEBUGDIR)/print_debug.c
-#				$(GFXDIR)/gfx.c
-#				$(UTILSDIR)/utils.c
 
 # **************************************************************************** #
 # Define the colors
@@ -99,7 +91,8 @@ L_MAGENTA	:=	\033[0;95m
 .PHONY: all clean fclean re info debug scan help checktexture norm
 
 all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
-all:: checktexture $(NAME) info
+# all:: checktexture $(NAME) info # uncomment when subbmiting
+all:: $(NAME) info
 
 # Define a pattern rule that compiles every .c file into a .o file
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
@@ -142,10 +135,8 @@ fclean: clean ## uses the rule clean and removes the obsolete files
 
 re: fclean all ## does fclean and all
 
-NORMFILES	+=	 ${shell find . -regex '.+\.c$$' -o -regex '.+\.h$$' | grep -v "minilibx"}
-
 norm: ## norm for .c/.h files excluding mlx files
-	@norminette -d $(NORMFILES)
+	@norminette -d $(SRC)
 	@echo "all good soilder!"
 
 info: ## prints project based info
@@ -163,8 +154,8 @@ info: ## prints project based info
 	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${SRC}${RESET}"
 	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
 
-debug: ## add your debug flags before calling all rule
-	CFLAGS	+=	-g3 -fsanitize=address --analyzer
+debug:: CFLAGS	+=	-g3 -fsanitize=address ## add your debug flags before calling all rule
+debug:: $(NAME)
 
 scan: ## uses scan-build on make all (prerequisite clan-18)
 	@$(shell scan-build-18 $(MAKE))
@@ -173,17 +164,17 @@ run: ## runs a test case for you "./cub3D maps/map.cub"
 	@$(shell ./cub3D maps/map.cub)
 
 help: ## prints a list of the possible commands
-	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
-	@echo "${LIGHT_MAGENTA}Usage:${RESET}"
+	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+	@echo "${L_MAGENTA}Usage:${RESET}"
 #	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
-	{printf "${LIGHT_GREEN}%-20s ${LIGHT_BLUE}%s${RESET}\n", $$1, $$2}'
-	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+	{printf "${L_GREEN}%-20s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
+	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 
 .DEFAULT:
-	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
-	@echo "${LIGHT_RED}[Error]:${RESET} ${LIGHT_BLUE}\tUnknown target '$@'."
+	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+	@echo "${L_RED}[Error]:${RESET} ${L_BLUE}\tUnknown target '$@'."
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
-	{printf "${LIGHT_GREEN}%-15s ${LIGHT_BLUE}%s${RESET}\n", $$1, $$2}'
-	@echo "${LIGHT_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
+	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"

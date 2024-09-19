@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.h                                            :+:      :+:    :+:   */
+/*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/19 05:59:55 by myousaf          ###   ########.fr       */
+/*   Created: 2024/09/19 04:34:59 by myousaf           #+#    #+#             */
+/*   Updated: 2024/09/19 05:48:55 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEBUG_H
-# define DEBUG_H
+#include "cub3d.h"
 
-# include "struct.h"
-# include <stdio.h>
+// int	close_x(t_soul_catcher *cube)
+// {
+// 	mlx_destroy_window(cube->mlx, cube->mlx->p_win);
+// 	free(cube->mlx);
+// 	close_free(cube);
+// 	exit(0);
+// 	return (0);
+// }
 
-void	printconent(t_soul_catcher *game);
-
-#endif
+// int	close_esc(int keycode, t_soul_catcher *cube)
+// {
+// 	(void) keycode;
+// 	mlx_destroy_window(cube->mlx, cube->mlx->p_win);
+// 	free(cube->mlx);
+// 	close_free(cube);
+// 	exit(0);
+// 	return (0);
+// }
