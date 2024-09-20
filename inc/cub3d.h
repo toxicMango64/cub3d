@@ -17,17 +17,9 @@
 # define FALSE 1
 
 # define WHITESPACE	" \v\t\f\r\n"
-# define L		123
-# define R		124
-# define DW		125
-# define UP		126
-
-# define W		13
-# define A		0
-# define S		1
-# define D		2
-
-# define Q		12
+// # define DW		125
+// # define UP		126
+// # define Q		12
 
 # ifdef OSX
 #  include <mlx.h>
@@ -45,15 +37,15 @@
 # ifdef __linux__
 #  include <linux/limits.h>
 #  define KEY_ESC 65307
-#  include "../mlx-linux/mlx.h"
+#  include "../minilibx/linux/mlx.h"
 #  define ESC 65307
 #  define W 119
 #  define A 97
 #  define S 115
 #  define D 100
 #  define LEFT 65361
-#  define RIGHT 65363
-#  define SHIFT 65505
+#  define L 123
+#  define R 124
 # endif
 
 # include "../zlibc/libft.h"
