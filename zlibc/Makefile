@@ -6,9 +6,32 @@
 #    By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/08 15:41:48 by myousaf           #+#    #+#              #
-#    Updated: 2024/05/06 10:55:01 by myousaf          ###   ########.fr        #
+#    Updated: 2024/09/21 05:55:29 by myousaf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+# **************************************************************************** #
+# Define the colors
+# **************************************************************************** #
+GB			:=	\033[42m
+RESET		:=	\033[0m
+RED			:=	\033[0;31m
+WHITE		:=	\033[0;97m
+BLUE		:=	\033[0;34m
+GRAY		:=	\033[0;90m
+CYAN		:=	\033[0;36m
+BLACK		:=	\033[0;30m
+GREEN		:=	\033[0;32m
+YELLOW		:=	\033[0;33m
+MAGENTA		:=	\033[0;35m
+BLUE		:=	\033[0;36m
+L_RED		:=	\033[0;91m
+L_GRAY		:=	\033[0;37m
+L_BLUE		:=	\033[0;94m
+L_CYAN		:=	\033[0;96m
+L_GREEN		:=	\033[0;92m
+L_YELLOW	:=	\033[0;93m
+L_MAGENTA	:=	\033[0;95m
 
 NAME	:=	libft.a
 CC		:=	cc
@@ -19,73 +42,73 @@ ifeq ($(shell uname -s), Linux)
 endif
 
 FR		+=	$(asciidir:%.dSYM)
-FR		+=	$(ft_isdir:%.dSYM)
-FR		+=	$(ft_printfdir:%.dSYM)
+FR		+=	$(isdir:%.dSYM)
+FR		+=	$(printf:%.dSYM)
 FR		+=	$(memdir:%.dSYM)
 FR		+=	$(stringdir:%.dSYM)
 FR		+=	$(stringsdir:%.dSYM)
 
 RM		:=	rm -fr
 
-asciidir		:=	./ascii
-ft_isdir		:=	./ft_is
-ft_printfdir	:=	./ft_printf
-memdir			:=	./mem
-stringdir		:=	./string
-stringsdir		:=	./strings
-lstdir			:=	./lst
+asciidir	:=	./ascii
+isdir		:=	./ft_is
+printf		:=	./ft_printf
+memdir		:=	./mem
+stringdir	:=	./string
+stringsdir	:=	./strings
+lstdir		:=	./lst
 
-CFILES			:=	$(asciidir)/atoll.c \
-					$(asciidir)/ft_atoi.c \
-					$(asciidir)/ft_itoa.c \
-					$(ft_isdir)/ft_isalnum.c \
-					$(ft_isdir)/ft_isalpha.c \
-					$(ft_isdir)/ft_isascii.c \
-					$(ft_isdir)/ft_isdigit.c \
-					$(ft_isdir)/ft_isprint.c \
-					$(ft_printfdir)/ft_char.c \
-					$(ft_printfdir)/ft_hexa.c \
-					$(ft_printfdir)/ft_nbr.c \
-					$(ft_printfdir)/ft_perr.c \
-					$(ft_printfdir)/ft_printf.c \
-					$(ft_printfdir)/ft_ptr.c \
-					$(ft_printfdir)/ft_putchar_fd.c \
-					$(ft_printfdir)/ft_putendl_fd.c \
-					$(ft_printfdir)/ft_putnbr_fd.c \
-					$(ft_printfdir)/ft_putstr_fd.c \
-					$(memdir)/ft_bzero.c \
-					$(memdir)/ft_calloc.c \
-					$(memdir)/ft_memchr.c \
-					$(memdir)/ft_memcmp.c \
-					$(memdir)/ft_memcpy.c \
-					$(memdir)/ft_memmove.c \
-					$(memdir)/ft_memset.c \
-					$(stringdir)/ft_split.c \
-					$(stringdir)/ft_strchr.c \
-					$(stringdir)/ft_strdup.c \
-					$(stringdir)/ft_striteri.c \
-					$(stringdir)/ft_strjoin.c \
-					$(stringdir)/ft_strlcat.c \
-					$(stringdir)/ft_strlcpy.c \
-					$(stringdir)/ft_strlen.c \
-					$(stringdir)/ft_strmapi.c \
-					$(stringdir)/ft_strncmp.c \
-					$(stringdir)/ft_strnstr.c \
-					$(stringdir)/ft_strrchr.c \
-					$(stringdir)/ft_strtrim.c \
-					$(stringdir)/ft_substr.c \
-					$(stringdir)/ft_tolower.c \
-					$(stringdir)/ft_toupper.c \
-					$(stringdir)/strcmp_sst.c \
-					$(lstdir)/ft_lstadd_back.c \
-					$(lstdir)/ft_lstadd_front.c \
-					$(lstdir)/ft_lstclear.c \
-					$(lstdir)/ft_lstdelone.c \
-					$(lstdir)/ft_lstiter.c \
-					$(lstdir)/ft_lstlast.c \
-					$(lstdir)/ft_lstmap.c \
-					$(lstdir)/ft_lstnew.c \
-					$(lstdir)/ft_lstsize.c
+CFILES	:=	$(asciidir)/atoll.c \
+			$(asciidir)/ft_atoi.c \
+			$(asciidir)/ft_itoa.c \
+			$(isdir)/ft_isalnum.c \
+			$(isdir)/ft_isalpha.c \
+			$(isdir)/ft_isascii.c \
+			$(isdir)/ft_isdigit.c \
+			$(isdir)/ft_isprint.c \
+			$(printf)/ft_char.c \
+			$(printf)/ft_hexa.c \
+			$(printf)/ft_nbr.c \
+			$(printf)/ft_perr.c \
+			$(printf)/ft_printf.c \
+			$(printf)/ft_ptr.c \
+			$(printf)/ft_putchar_fd.c \
+			$(printf)/ft_putendl_fd.c \
+			$(printf)/ft_putnbr_fd.c \
+			$(printf)/ft_putstr_fd.c \
+			$(memdir)/ft_bzero.c \
+			$(memdir)/ft_calloc.c \
+			$(memdir)/ft_memchr.c \
+			$(memdir)/ft_memcmp.c \
+			$(memdir)/ft_memcpy.c \
+			$(memdir)/ft_memmove.c \
+			$(memdir)/ft_memset.c \
+			$(stringdir)/ft_split.c \
+			$(stringdir)/ft_strchr.c \
+			$(stringdir)/ft_strdup.c \
+			$(stringdir)/ft_striteri.c \
+			$(stringdir)/ft_strjoin.c \
+			$(stringdir)/ft_strlcat.c \
+			$(stringdir)/ft_strlcpy.c \
+			$(stringdir)/ft_strlen.c \
+			$(stringdir)/ft_strmapi.c \
+			$(stringdir)/ft_strncmp.c \
+			$(stringdir)/ft_strnstr.c \
+			$(stringdir)/ft_strrchr.c \
+			$(stringdir)/ft_strtrim.c \
+			$(stringdir)/ft_substr.c \
+			$(stringdir)/ft_tolower.c \
+			$(stringdir)/ft_toupper.c \
+			$(stringdir)/strcmp_sst.c \
+			$(lstdir)/ft_lstadd_back.c \
+			$(lstdir)/ft_lstadd_front.c \
+			$(lstdir)/ft_lstclear.c \
+			$(lstdir)/ft_lstdelone.c \
+			$(lstdir)/ft_lstiter.c \
+			$(lstdir)/ft_lstlast.c \
+			$(lstdir)/ft_lstmap.c \
+			$(lstdir)/ft_lstnew.c \
+			$(lstdir)/ft_lstsize.c
 
 ODIR	:=	zobjdir
 OBJS	:=	$(CFILES:%.c=$(ODIR)/%.o)
@@ -100,15 +123,6 @@ else ifeq ($(UNAME), Darwin)
 	@echo $(NUMPROC)
 endif
 
-# all:
-# ifeq ($(NUMPROC),)
-# 	@echo $(NUMPROC)
-# 	$(MAKE) -j$(NUMPROC) $(NAME)
-# else
-# 	@echo "NUMPROC is empty"
-# 	$(MAKE) $(NAME)
-# endif
-
 all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
 all:: $(NAME)
 
@@ -116,7 +130,7 @@ all:: $(NAME)
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 $(ODIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	@echo "target: $@\t\tprereq: $<"
+#	@printf "${L_BLUE}prereq: ${L_GREEN}%-30s ${L_BLUE}target: ${L_GREEN}%s${RESET}\n" "$<" "$@"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(ODIR)
@@ -130,17 +144,17 @@ fclean: clean
 
 re: fclean all
 
-info: MAKEFLAGS	+=	-j$(NUMPROC)
+# info: MAKEFLAGS	+=	-j$(NUMPROC)
 info:
 	@echo "# ---------------------------------------------------------------- #"
-	@echo "UNAME		:	$(UNAME)"
-	@echo "NUMPROC		:	$(NUMPROC)"
-	@echo "MAKEFLAGS	:	$(MAKEFLAGS)"
-	@echo "NAME		:	$(NAME)"
-	@echo "CC		:	$(CC)"
-	@echo "CFLAGS		:	$(CFLAGS)"
-	@echo "LDFLAGS		:	$(LDFLAGS)"
-	@echo "LIBX		:	$(LIBX)"
-	@echo "texture files	:\n	$(TEXTTURE_FILES)"
-	@echo "SRC:\n	$(shell ls ./*)"
+	@echo "UNAME		:	${UNAME}"
+	@echo "NUMPROC		:	${NUMPROC}"
+	@echo "MAKEFLAGS	:	${MAKEFLAGS}"
+	@echo "NAME		:	${NAME}"
+	@echo "CC		:	${CC}"
+	@echo "CFLAGS		:	${CFLAGS}"
+	@echo "LDFLAGS		:	${LDFLAGS}"
+	@echo "LIBX		:	${LIBX}"
+	@echo "texture files	:\n	${TEXTTURE_FILES}"
+	@echo "SRC:\n	${CFILES}"
 	@echo "# ---------------------------------------------------------------- #"
