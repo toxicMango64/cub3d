@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 21:24:50 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/21 23:18:19 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
 // # define UP		126
 // # define Q		12
 
-# ifdef OSX
-#  include <mlx.h>
+// # ifdef OSX
+# ifdef __APPLE__
+#  include <../minilibx/opengl/mlx.h>
+// #  include <../minilibx/minilibx/mlx.h>
 #  include <limits.h>
 #  define ESC 53
 #  define W 13
@@ -35,9 +37,8 @@
 # endif
 
 # ifdef __linux__
-#  include <linux/limits.h>
-#  define KEY_ESC 65307
 #  include "../minilibx/linux/mlx.h"
+#  include <linux/limits.h>
 #  define ESC 65307
 #  define W 119
 #  define A 97

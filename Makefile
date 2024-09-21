@@ -15,7 +15,8 @@ ifeq ($(UNAME), Darwin) # mac
 else ifeq ($(UNAME), FreeBSD) # FreeBSD
 	CC	:=	clang
 else ifeq ($(UNAME), Linux) # linux or others
-	CC	:=	gcc
+#	CC	:=	gcc
+	CC	:=	clang-18
 endif
 
 # **************************************************************************** #
@@ -28,6 +29,7 @@ ifeq ($(UNAME), Linux)
 	NUMPROC		:=	$(shell grep -c ^processor /proc/cpuinfo)
 else ifeq ($(UNAME), Darwin)
 	LIBX_DIR	+=	minilibx/opengl
+	MLXFLG		+=	-Lminilibx/opengl -lmlx
 	MLXFLG		:=	-framework OpenGL -framework Appkit
 	CPPFLAGS	+=	-DSTRINGPUTX11
 	NUMPROC		:= $(shell sysctl -n hw.ncpu)
@@ -81,9 +83,9 @@ all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
 all:: $(NAME) info
 
 PHONY	+= debug
-debug:: $(TARGET_DEBUG)
-# debug:: CFLAGS	+=	-g3 -fsanitize=address ## add your debug flags before calling all rule
-# debug:: $(NAME)
+# debug:: $(TARGET_DEBUG)
+debug:: CFLAGS	+=	-g3 -fsanitize=address ## add your debug flags before calling all rule
+debug:: $(NAME)
 
 # non-phony targets
 # Object files
@@ -99,11 +101,11 @@ $(LIBC):
 
 $(NAME): $(LIBC) $(OBJ)
 #	@echo "build cflags: $(CFLAGS)"
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ) $(LIBC) -o $(NAME)
+	@$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ) $(LIBC) $(LIBX) -o $(NAME)
 
 $(TARGET_DEBUG): $(LIBC) $(OBJ_DEBUG)
 #	@echo "build cflags: $(CFLAGS)"
-	@$(CC) $(DBGFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ_DEBUG) $(LIBC) -o $(NAME)
+	@$(CC) $(DBGFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ_DEBUG) $(LIBC) $(LIBX) -o $(NAME)
 
 PHONY	+= compiler_info
 # Define a pattern rule that compiles every .c file into a .o file
