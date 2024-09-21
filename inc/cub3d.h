@@ -6,15 +6,15 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/19 06:00:35 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/21 21:24:50 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define TRUE 0
-# define FALSE 1
+# define TRUE 1
+# define FALSE 0
 
 # define WHITESPACE	" \v\t\f\r\n"
 // # define DW		125
@@ -50,16 +50,41 @@
 
 # include "../zlibc/libft.h"
 # include "../utils/utils.h"
-# include "debug.h"
+// # include "debug.h"
 # include "struct.h"
 # include <unistd.h>
 # include <fcntl.h>
+# include <stdlib.h>
 # include <stdio.h>
 
-int		validate_map(const char *path_to_map, t_soul_catcher *game);
+/* ******************* *
+ * FUNCTION PROTOTYPES *
+ * ******************* */
+
+// Setup
+void	init_soul_catcher(t_soul_catcher *game, t_point *player, t_map *map, \
+	t_textures *textures);
+int		validate(const int ac, const char * const *av);
+int		map_signature_check(const char *path_to_map);
+
+// Handlers
+int		handle_destroy(t_soul_catcher *game);
+int		handle_keypress(int keysym, t_soul_catcher *game);
+
+// Parsing
+int		update_map(t_soul_catcher *game, char *processed_line, char *line);
+int		assign_texture(t_texture_type type, char *texture, t_soul_catcher *game);
+int		is_map_valid(t_soul_catcher *game);
+int		extractfile(t_soul_catcher *game, int fd);
+int		is_surrounded_by_walls(t_soul_catcher *game, t_point *player_pos);
+
 char	**intit_texture(void);
 int		set_game_data(t_soul_catcher *game, char *line, char **t_ids);
 int		wrerr(const char *str);
 int		wr(const char *str);
+char	**ft_tabdup(char **tab, char fill_char);
+
+// Cleanup
+void	free_textures(t_textures *textures);
 
 #endif

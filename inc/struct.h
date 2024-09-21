@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/19 05:06:13 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/21 06:47:57 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 /** STRUCTURES **/
 typedef struct	s_point
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
+	char	direction;
 }	t_point;
 
 typedef struct s_textures
@@ -40,7 +41,6 @@ typedef struct	s_map
 	int		width;
 	char	*full;
 	char	**grid;
-	t_point	*player_pos;
 }	t_map;
 
 typedef struct	s_game
@@ -49,6 +49,7 @@ typedef struct	s_game
 	int			*p_win;
 	t_map		*map;
 	t_textures	*textures;
+	t_point		*player_pos;
 }	t_soul_catcher;
 
 typedef enum e_texture_types

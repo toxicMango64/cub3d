@@ -6,14 +6,14 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 04:38:06 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/19 06:10:07 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/21 21:26:40 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3d.h"
+#include "cub3d.h"
 
-// tar: Error opening archive: Error reading 'maps'
-void	map_signature_check(const char *path_to_map)
+// cub3D: Error opening archive: Error reading 'maps'
+int	map_signature_check(const char *path_to_map)
 {
 	int		fd;
 	ssize_t	offset;
@@ -22,17 +22,49 @@ void	map_signature_check(const char *path_to_map)
 	while (path_to_map[offset] != '\0')
 		offset++;
 	if (strcmp_sst(path_to_map, ".cub", offset - 4) != 0)
-		perr ("cub3d: unknown suffix -- ignored", 2);
+		return (printf("cub3d: unknown suffix -- ignored"));
 	fd = open(path_to_map, O_RDONLY);
 	if (fd == -1)
-		perr ("cub3d: Error opening file: Error reading 'map'", -1);
+		return (printf("cub3d: Error opening file: Error reading 'map'"));
 	close(fd);
+	return (EXIT_SUCCESS);
+}
+
+int	set_game_data(t_soul_catcher *game, char *line, char **t_ids)
+{
+	int		i;
+	char	*processed_line;
+
+	processed_line = ft_strtrim(line, WHITESPACE);
+	if (processed_line[0] == '1')
+		return (update_map(game, processed_line, line));
+	else if (processed_line[0] == '\n')
+		return (printf("new line:"));
+	i = -1;
+	while (t_ids[++i])
+	{
+		if (!ft_strncmp(processed_line, t_ids[i], ft_strlen(t_ids[i])))
+		{
+			if (game->map->full)
+				return (free_textures(game->textures), free(processed_line), \
+					wrerr("Error: Map does not follow the strict Order"));
+			if (assign_texture(i, processed_line + ft_strlen(t_ids[i]), game))
+				return (free_textures(game->textures), \
+					free(processed_line), EXIT_FAILURE);
+			break ;
+		}
+	}
+	return (free(processed_line), EXIT_SUCCESS);
+}
+
+char	**intit_texture(void)
+{
+	static char *t_id[7] = {"NO", "EA", "WE", "SO", "F", "C", NULL};
+	return (t_id);
 }
 
 int	extractfile(t_soul_catcher *game, int fd)
 {
-	(void)game;
-	(void)fd;
 	char	*line;
 	char	**t_ids;
 
@@ -44,7 +76,7 @@ int	extractfile(t_soul_catcher *game, int fd)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (printf("line: {%s}\n", line) && (line[0] || line[0] != '\n'))
+		if (line[0] || line[0] == '\n')
 		{
 			if (set_game_data(game, line, t_ids))
 				return (free(line), EXIT_FAILURE);
@@ -54,16 +86,14 @@ int	extractfile(t_soul_catcher *game, int fd)
 	}
 	return (free(line), EXIT_SUCCESS);
 }
+// int	validate_map(const char *path_to_map, t_soul_catcher *game)
+// {
+// 	int	fd;
 
-int	validate_map(const char *path_to_map, t_soul_catcher *game)
-{
-	int	fd;
+// 	map_signature_check(path_to_map);
+// 	fd = open(path_to_map, O_RDONLY);
+// 	(extractfile(game, fd), close(fd));
 
-	(void)game;
-	map_signature_check(path_to_map);
-	fd = open(path_to_map, O_RDONLY);
-	(extractfile(game, fd), close(fd));
-
-	printconent(game);
-	return (EXIT_SUCCESS);
-}
+// 	printconent(game);
+// 	return (EXIT_SUCCESS);
+// }

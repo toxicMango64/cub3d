@@ -6,44 +6,50 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/19 05:58:57 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/21 21:19:08 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3d.h"
-
-int	parse(const int ac, const char * const *av, t_soul_catcher *game)
-{
-	if (ac != 2)
-		return (printf("Usage: %s <map_file>\n", av[0]), 1);
-	if (validate_map(av[1], game))
-		return (EXIT_FAILURE);
-	// find_valid_path(game);
-	return (EXIT_SUCCESS);
-}
+#include "cub3d.h"
+#include "debug.h"
 
 // int	gfx_setup(t_soul_catcher *game)
 // {
-// 	game->mlx->p_mlx = mlx_init();
-// 	game->mlx->p_win = mlx_new_window(game->mlx->p_mlx, 1280, 720, "cub3D");
-// 	mlx_hook(game->mlx->p_win, 17, 1L << 2, handle_destroy, &game);
-// 	mlx_hook(game->mlx->p_win, 2, 1L << 0, handle_keypress, &game);
-// 	mlx_loop(game->mlx->p_mlx);
+// 	game.p_mlx = mlx_init();
+// 	game.p_win = mlx_new_window(game.p_mlx, 1280, 720, "cub3D");
+// 	mlx_hook(game.p_win, 17, 1L << 2, handle_destroy, &game);
+// 	mlx_hook(game.p_win, 2, 1L << 0, handle_keypress, &game);
+// 	mlx_loop(game.p_mlx);
 // }
+
+int	validate(const int ac, const char * const *av)
+{
+	if (ac != 2)
+		return (printf("Usage: %s <map_file>\n", av[0]), 1);
+	if (map_signature_check(av[1]))
+		exit (-1);
+	return (EXIT_SUCCESS);
+}
 
 int	main(const int ac, const char * const *av)
 {
 	t_soul_catcher	game;
+	t_map			map;
+	t_point			player;
+	t_textures		textures;
 
-	game.map = malloc(sizeof(t_map));
-	if (parse(ac, av, &game))
+	if (validate(ac, av))
 		return (EXIT_FAILURE);
-	// if (initgame(ac, av, &game))
-	// 	return (EXIT_FAILURE);
-	// if (gfx_setup(ac, av, &game))
-	// 	return (EXIT_FAILURE);
-	// while (1) ;
-	return (0);
+	init_soul_catcher(&game, &player, &map, &textures);
+	map.fd = open(av[1], O_RDONLY);
+	if (extractfile(&game, map.fd))
+		return (close(game.map->fd), EXIT_FAILURE);
+	if (is_map_valid(&game))
+		return (close(game.map->fd), free(game.map->full), \
+			freearr(map.grid), free_textures(game.textures), EXIT_FAILURE);
+	print_info(*game.textures, map);
+	// gfx_setup(game);
+	return (EXIT_SUCCESS);
 }
 
 /* -------------------------------------------------------------------------- */

@@ -6,7 +6,7 @@
 #    By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/08 15:41:48 by myousaf           #+#    #+#              #
-#    Updated: 2024/09/21 05:55:29 by myousaf          ###   ########.fr        #
+#    Updated: 2024/09/21 21:27:40 by myousaf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,7 @@ CFILES	:=	$(asciidir)/atoll.c \
 			$(memdir)/ft_memcpy.c \
 			$(memdir)/ft_memmove.c \
 			$(memdir)/ft_memset.c \
+			$(memdir)/freearr.c \
 			$(stringdir)/ft_split.c \
 			$(stringdir)/ft_strchr.c \
 			$(stringdir)/ft_strdup.c \

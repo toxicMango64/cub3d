@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   write.c                                            :+:      :+:    :+:   */
+/*   freearr.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/19 05:58:58 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 21:19:58 by myousaf          ###   ########.fr       */
+/*   Created: 2024/09/21 21:01:37 by myousaf           #+#    #+#             */
+/*   Updated: 2024/09/21 21:02:39 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3d.h"
-#include "../../inc/debug.h"
+#include "mem.h"
 
-int		wrerr(const char *str)
+void	freearr(char **arr)
 {
-	while (str)
-		write(2, str++, 1);
-	return (EXIT_FAILURE);
-}
+	int	i;
 
-int		wr(const char *str)
-{
-	while (str)
-		write(2, str++, 1);
-	return (EXIT_SUCCESS);
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+	{
+		free(arr[i]);
+		arr[i] = NULL;
+		i++;
+	}
+	free(arr);
 }
