@@ -11,9 +11,9 @@ OBS		+=	cub3d.dSYM	\
 			.vscode
 
 ifeq ($(UNAME), Darwin) # mac
-	CC	:= cc
+	CC	?= cc
 else ifeq ($(UNAME), Linux) # linux
-	CC	:=	clang-18
+	CC	?=	clang-18
 else # or others
 	@echo "unsupported OS"
 	@exit (1);
@@ -23,16 +23,18 @@ endif
 #  SYSTEM SPECIFIC SETTINGS
 # **************************************************************************** #
 ifeq ($(UNAME), Linux)
-	LIBX_DIR	+=	minilibx/linux
-	MLXFLG		:=	-lXext -lX11
-	CPPFLAGS	+=	-D LINUX -Wno-unused-result
-	NUMPROC		:=	$(shell grep -c ^processor /proc/cpuinfo)
+  INC		:=  ${shell find . -regex '.+\.h$$' | grep -v "minilibx"}
+  MLXFLG	:=  -lXext -lX11
+  NUMPROC	:=  $(shell grep -c ^processor /proc/cpuinfo)
+  LIBX_DIR	+=  minilibx/linux
+  CPPFLAGS	+=  -D LINUX -Wno-unused-result
 else ifeq ($(UNAME), Darwin)
-	LIBX_DIR	+=	minilibx/opengl
-	MLXFLG		+=	-Lminilibx/opengl -lmlx
-	MLXFLG		:=	-framework OpenGL -framework Appkit
-	CPPFLAGS	+=	-DSTRINGPUTX11
-	NUMPROC		:= $(shell sysctl -n hw.ncpu)
+  INC		:=  ${shell find -E . -regex '.+\.h' | grep -v "minilibx"}
+  NUMPROC	:=  $(shell sysctl -n hw.ncpu)
+  MLXFLG	+=  -Lminilibx/opengl -lmlx
+  MLXFLG	:=  -framework OpenGL -framework Appkit
+  CPPFLAGS	+=  -DSTRINGPUTX11
+  LIBX_DIR	+=  minilibx/opengl
 endif
 
 # **************************************************************************** #
@@ -42,15 +44,6 @@ LIBC_DIR	=	zlibc
 LIBC		=	$(LIBC_DIR)/libft.a
 LIBX		=	$(LIBX_DIR)/libmlx.a
 LDFLAGS		+=	-L$(LIBC_DIR) -lft
-
-# Source files
-ifeq ($(UNAME), Linux)
-	SRC		:=	${shell find . -regex '.+\.c$$' | grep "src"}
-	INC		:=	${shell find . -regex '.+\.h$$' | grep -v "minilibx"}
-else ifeq ($(UNAME), Darwin)
-	SRC		:=	${shell find -E . -regex '.+\.c' | grep "src"}
-	INC		:=	${shell find -E . -regex '.+\.h' | grep -v "minilibx"}
-endif
 
 # **************************************************************************** #
 # Define the colors
@@ -77,14 +70,7 @@ L_MAGENTA	:=	\033[0;95m
 
 # --------------------------------------------------------------------------- #"
 
-PHONY	+= all
-# all:: MAKEFLAGS	+=	-j$(NUMPROC)
-all:: $(NAME) info ## builds the project
-
-PHONY	+= debug
-debug:: CFLAGS	+=	-g3 -fsanitize=address ## add your debug flags before build
-debug:: $(NAME)
-
+# # Source files
 SRCDIR		:=	./src
 cleanupdir	:=	$(SRCDIR)/cleanup
 debugdir	:=	$(SRCDIR)/debug
@@ -104,14 +90,20 @@ SRC	:=	$(SRCDIR)/cub3d.c \
 		$(utilsdir)/tabdup.c \
 		$(utilsdir)/write.c
 
-# non-phony targets
 # Object files
 ODIR	:=	obj
-OBJ	:=	$(SRC:%.c=$(ODIR)/%.o)
-# OBJ		=	$(SRC:.c=.o)
-# DEBUGODIR	:=	zobjdir
-# OBJ_DEBUG	=	$(SRC:%.c=$(DEBUGODIR)/%.o)
+OBJ		:=	$(SRC:%.c=$(ODIR)/%.o)
 
+PHONY	+= all clean info
+mode	?=
+ifeq ($(mode), debug)
+  CFLAGS	+=	-g3 -fsanitize=address
+  all: clean $(NAME) info
+else
+  all: $(NAME) info ## builds the project
+endif
+
+# non-phony targets
 $(LIBX):
 	@$(MAKE) -sC $(LIBX_DIR)
 
@@ -132,16 +124,6 @@ $(ODIR)/%.o : %.c | compiler_info
 compiler_info:
 	@echo "${L_CYAN}[compiler info]: ${L_MAGENTA}$(CC) -c $(CFLAGS) $(CPPFLAGS)${RESET}"
 
-PHONY	+= checktexture
-TEXTURES = east north south west
-checktexture:
-	@for texture in $(TEXTURES); do \
-		if [ ! -f $(TEXTTURE_DIR)/$$texture\_texture ]; then \
-			echo "$$texture texture does not exist"; \
-		fi; \
-	done
-	@echo "texture exist 🎊";
-
 PHONY	+= clean
 clean: ## cleans all the obj files
 	@$(MAKE) clean -C $(LIBC_DIR)
@@ -149,16 +131,12 @@ clean: ## cleans all the obj files
 
 PHONY	+= fclean
 fclean: clean ## uses the rule clean and removes the obsolete files
-	@$(RM) $(NAME) $(ODIR) $(OBS)
+	@$(RM) $(NAME) $(ODIR) $(DEBUGODIR) $(OBS)
 	@$(MAKE) fclean -C $(LIBC_DIR)
 	@$(MAKE) clean -C $(LIBX_DIR)
 
 PHONY	+= re
 re: fclean all ## does fclean and all
-
-# PHONY	+= gcc
-# gcc: CC	:=	gcc ## uses gcc as compiler with the --analyzer flag
-# 	@$(NAME)
 
 PHONY	+= norm
 norm: ## norm for .c/.h files excluding mlx files

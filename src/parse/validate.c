@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 19:47:39 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/22 13:32:40 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/23 01:29:36 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	check_texture(const char *t_path, const char *t_name)
 	int	fd;
 
 	if (!t_path)
-		return (printf("cub3d: Error opening texture: '{%s}'\n", t_path));
+		return (printf("cub3d: Error opening texture: '{%s}'\n", t_name));
 	fd = open(t_path, O_RDONLY);
 	if (fd == -1)
 		return (perror(t_name), EXIT_FAILURE);

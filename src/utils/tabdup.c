@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 21:04:10 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/22 13:31:01 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/23 01:27:47 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,25 @@ char	*ft_strac(char *str, char c)
 	if (!str)
 		return (ft_strdup(append_char));
 	new_str = malloc(ft_strlen(str) + 2);
+	if (!new_str)
+		return (NULL);
 	i = -1;
 	while (str[++i])
 		new_str[i] = str[i];
 	new_str[i++] = c;
 	new_str[i] = '\0';
 	free(str);
-	str = new_str;
 	return (new_str);
+}
+
+static char	**tab_help(char **new_tab, char *str)
+{
+	new_tab = malloc(sizeof(char *) * 2);
+	if (!new_tab)
+		return (NULL);
+	new_tab[0] = ft_strdup(str);
+	new_tab[1] = NULL;
+	return (new_tab);
 }
 
 char	**ft_tabjoin(char **tab, char *str)
@@ -41,17 +52,14 @@ char	**ft_tabjoin(char **tab, char *str)
 
 	new_tab = NULL;
 	if (!tab)
-	{
-		new_tab = malloc(sizeof(char *) * 2);
-		new_tab[0] = ft_strdup(str);
-		new_tab[1] = NULL;
-		return (new_tab);
-	}
+		return (tab_help(new_tab, str));
 	width = 0;
 	i = -1;
 	while (tab[width])
 		width++;
 	new_tab = malloc(sizeof(char *) * (width + 2));
+	if (!new_tab)
+		return (NULL);
 	while (++i < width)
 		new_tab[i] = ft_strdup(tab[i]);
 	new_tab[i++] = ft_strdup(str);
@@ -70,6 +78,47 @@ static char	check_char(char c)
 	return (zero);
 }
 
+// char **ft_tabdup(char **tab, char fill_char)
+// {
+// 	int y;
+// 	int x;
+// 	char **duped_tab = NULL;
+// 	char *line;
+
+// 	y = -1;
+// 	while (tab[++y])
+// 	{
+// 		line = NULL;
+// 		x = -1;
+// 		while (tab[y][++x])
+// 		{
+// 			if (!fill_char)
+// 				line = ft_strac(line, tab[y][x]);
+// 			else
+// 				line = ft_strac(line, check_char(tab[y][x]));
+// 			if (!line) // Check for allocation failure
+// 			{
+// 				// Free previously allocated memory
+// 				for (int j = 0; j < y; j++)
+// 					free(duped_tab[j]);
+// 				free(duped_tab);
+// 				return (NULL);
+// 			}
+// 		}
+// 		duped_tab = ft_tabjoin(duped_tab, line);
+// 		if (!duped_tab) // Check for allocation failure
+// 		{
+// 			free(line);
+// 			for (int j = 0; j <= y; j++) // Free previously allocated lines
+// 				free(duped_tab[j]); // Freeing the joined tab
+// 			return (NULL);
+// 		}
+// 		free(line); // Free line after it has been joined
+// 		y++;
+// 	}
+// 	return (duped_tab);
+// }
+
 char	**ft_tabdup(char **tab, char fill_char)
 {
 	int		y;
@@ -77,11 +126,11 @@ char	**ft_tabdup(char **tab, char fill_char)
 	char	**duped_tab;
 	char	*line;
 
-	y = 0;
+	y = -1;
 	duped_tab = NULL;
-	line = NULL;
-	while (tab[y])
+	while (tab[++y])
 	{
+		line = NULL;
 		x = -1;
 		while (tab[y][++x])
 		{
@@ -89,11 +138,13 @@ char	**ft_tabdup(char **tab, char fill_char)
 				line = ft_strac(line, tab[y][x]);
 			else
 				line = ft_strac(line, check_char(tab[y][x]));
+			if (!line)
+				return (freearr(duped_tab), NULL);
 		}
 		duped_tab = ft_tabjoin(duped_tab, line);
+		if (!duped_tab)
+			return (free(line), freearr(duped_tab), NULL);
 		free(line);
-		line = NULL;
-		y++;
 	}
 	return (duped_tab);
 }
