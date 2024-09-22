@@ -11,9 +11,9 @@ OBS		+=	cub3d.dSYM	\
 			.vscode
 
 ifeq ($(UNAME), Darwin) # mac
-	CC	?= cc
+  CC	:= gcc
 else ifeq ($(UNAME), Linux) # linux
-	CC	?=	clang-18
+  CC	:=	clang
 else # or others
 	@echo "unsupported OS"
 	@exit (1);
@@ -67,6 +67,9 @@ L_CYAN		:=	\033[0;96m
 L_GREEN		:=	\033[0;92m
 L_YELLOW	:=	\033[0;93m
 L_MAGENTA	:=	\033[0;95m
+C			:=	\033[38;5;
+O			:=	72
+L			:=	m
 
 # --------------------------------------------------------------------------- #"
 
@@ -98,9 +101,9 @@ PHONY	+= all clean info
 mode	?=
 ifeq ($(mode), debug)
   CFLAGS	+=	-g3 -fsanitize=address
-  all: clean $(NAME) info
+  all: clean compiler_info $(NAME) info
 else
-  all: $(NAME) info ## builds the project
+  all: $(NAME) cubEd ## builds the project
 endif
 
 # non-phony targets
@@ -116,7 +119,7 @@ $(NAME): $(LIBC) $(LIBX) $(OBJ)
 # Define a pattern rule that compiles every .c file into a .o file
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 PHONY	+= compiler_info
-$(ODIR)/%.o : %.c | compiler_info
+$(ODIR)/%.o : %.c
 	@mkdir -p $(dir $@)
 	@printf "${L_BLUE}[prereq]: ${L_GREEN}%-30s ${L_BLUE}[target]: ${L_GREEN}%s${RESET}\n" "$<" "$@"
 	@$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
@@ -142,6 +145,18 @@ PHONY	+= norm
 norm: ## norm for .c/.h files excluding mlx files
 	@norminette $(SRC) $(INC)
 	@echo "all good soilder!"
+
+PHONY	+=	cubEd
+SHIFT	=	$(eval O=$(shell echo $$((($(O)%15)+1))))
+cubEd:
+	@echo "$(C)$(O)$(L) ______     __  __     ______     ______     _____    ";
+	@echo "$(C)$(O)$(L)/\  ___\   /\ \/\ \   /\  == \   /\___  \   /\  __ \  ";
+	$(SHIFT)
+	@echo "$(C)$(O)$(L)\ \ \____  \ \ \_\ \  \ \  __<   \/_\___ \  \ \ \_\ \ ";
+	@echo "$(C)$(O)$(L) \ \_____\  \ \_____\  \ \_____\  /\______\  \ \____/ ";
+	$(SHIFT)
+	@echo "$(C)$(O)$(L)  \/_____/   \/_____/   \/_____/  \/______/   \/____/ ";
+	@echo "$(C)$(O)$(L)                                                      ";
 
 PHONY	+= info
 info: ## prints project based info
