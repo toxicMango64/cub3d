@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 14:20:02 by myousaf           #+#    #+#             */
-/*   Updated: 2024/04/09 12:39:22 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/22 16:44:14 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@
 
 // ------------------------------- FT_HEADERS ------------------------------- //
 
+# include "ft_printf/ft_printf.h"
+# include "gnl/get_next_line.h"
+# include "lst/lst.h"
+# include "mem/mem.h"
 # include "ascii/ascii.h"
 # include "ft_is/ft_is.h"
-# include "ft_printf/ft_printf.h"
-# include "mem/mem.h"
 # include "string/string.h"
-# include "lst/lst.h"
 
 #endif

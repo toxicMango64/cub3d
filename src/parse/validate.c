@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 19:47:39 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 20:59:57 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/22 13:32:40 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	has_invalid_chars(t_soul_catcher *game, t_point *player)
 	return (EXIT_SUCCESS);
 }
 
-static int check_texture(const char *t_path, const char *t_name)
+static int	check_texture(const char *t_path, const char *t_name)
 {
-	int fd;
+	int	fd;
 
 	if (!t_path)
 		return (printf("cub3d: Error opening texture: '{%s}'\n", t_path));
@@ -60,7 +60,14 @@ static int check_texture(const char *t_path, const char *t_name)
 	return (EXIT_SUCCESS);
 }
 
-int has_required_config(t_soul_catcher *game)
+/**
+ * if (!game->textures->floor) // shove up error check for more than 255 or
+ * less than 0
+ * 
+ * if (!game->textures->ceiling) // shove up error check for more than 255 or
+ * less than 0
+*/
+int	has_required_config(t_soul_catcher *game)
 {
 	if (check_texture(game->textures->north, "North texture"))
 		return (printf("No north texture detected\n"));
@@ -70,9 +77,9 @@ int has_required_config(t_soul_catcher *game)
 		return (printf("No west texture detected\n"));
 	if (check_texture(game->textures->south, "South texture"))
 		return (printf("No south texture detected\n"));
-	if (!game->textures->floor) // shove up error check for more than 255 or less than 0
+	if (!game->textures->floor)
 		return (printf("No floor texture detected\n"));
-	if (!game->textures->ceiling) // shove up error check for more than 255 or less than 0
+	if (!game->textures->ceiling)
 		return (printf("No ceiling texture detected\n"));
 	if (!game->map->full)
 		return (printf("No map found\n"));

@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 06:47:57 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/22 13:38:42 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../zlibc/libft.h"
 
 /** STRUCTURES **/
-typedef struct	s_point
+typedef struct s_point
 {
 	int		x;
 	int		y;
@@ -33,7 +33,7 @@ typedef struct s_textures
 	char	*ceiling;
 }	t_textures;
 
-typedef struct	s_map
+typedef struct s_map
 {
 	int		fd;
 	int		floor_color[3];
@@ -43,7 +43,7 @@ typedef struct	s_map
 	char	**grid;
 }	t_map;
 
-typedef struct	s_game
+typedef struct s_game
 {
 	int			*p_mlx;
 	int			*p_win;

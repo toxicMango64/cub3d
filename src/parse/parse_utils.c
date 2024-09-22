@@ -6,12 +6,18 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 04:38:03 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 21:29:47 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/22 13:25:36 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+// printf("%s\n", processed_line);
+// if (strpbrk(processed_line, WHITESPACE))
+// {
+// 	printf("Error: Map does not follow the strict Order");
+// 	return (EXIT_FAILURE);
+// }
 int	update_map(t_soul_catcher *game, char *processed_line, char *line)
 {
 	char	*temp;
@@ -19,12 +25,6 @@ int	update_map(t_soul_catcher *game, char *processed_line, char *line)
 	if (!game->map->full)
 		game->map->full = ft_strdup("");
 	temp = game->map->full;
-	// printf("%s\n", processed_line);
-	// if (strpbrk(processed_line, WHITESPACE))
-	// {
-	// 	printf("Error: Map does not follow the strict Order");
-	// 	return (EXIT_FAILURE);
-	// }
 	game->map->full = ft_strjoin(game->map->full, line);
 	return (free(temp), free(processed_line), EXIT_SUCCESS);
 }

@@ -12,11 +12,11 @@ OBS		+=	cub3d.dSYM	\
 
 ifeq ($(UNAME), Darwin) # mac
 	CC	:= cc
-else ifeq ($(UNAME), FreeBSD) # FreeBSD
-	CC	:=	clang
-else ifeq ($(UNAME), Linux) # linux or others
-#	CC	:=	gcc
+else ifeq ($(UNAME), Linux) # linux
 	CC	:=	clang-18
+else # or others
+	@echo "unsupported OS"
+	@exit (1);
 endif
 
 # **************************************************************************** #
@@ -38,18 +38,18 @@ endif
 # **************************************************************************** #
 #  Project based configuration
 # **************************************************************************** #
-LDFLAGS		+=	-L$(LIBC_DIR) -lft
-
 LIBC_DIR	=	zlibc
-LIBC		=	$(LIBC_DIR)/libft.a \
-				utils/utils.a
+LIBC		=	$(LIBC_DIR)/libft.a
 LIBX		=	$(LIBX_DIR)/libmlx.a
+LDFLAGS		+=	-L$(LIBC_DIR) -lft
 
 # Source files
 ifeq ($(UNAME), Linux)
 	SRC		:=	${shell find . -regex '.+\.c$$' | grep "src"}
+	INC		:=	${shell find . -regex '.+\.h$$' | grep -v "minilibx"}
 else ifeq ($(UNAME), Darwin)
 	SRC		:=	${shell find -E . -regex '.+\.c' | grep "src"}
+	INC		:=	${shell find -E . -regex '.+\.h' | grep -v "minilibx"}
 endif
 
 # **************************************************************************** #
@@ -78,39 +78,54 @@ L_MAGENTA	:=	\033[0;95m
 # --------------------------------------------------------------------------- #"
 
 PHONY	+= all
-all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
-# all:: checktexture $(NAME) info # uncomment when subbmiting
-all:: $(NAME) info
+# all:: MAKEFLAGS	+=	-j$(NUMPROC)
+all:: $(NAME) info ## builds the project
 
 PHONY	+= debug
-# debug:: $(TARGET_DEBUG)
-debug:: CFLAGS	+=	-g3 -fsanitize=address ## add your debug flags before calling all rule
+debug:: CFLAGS	+=	-g3 -fsanitize=address ## add your debug flags before build
 debug:: $(NAME)
+
+SRCDIR		:=	./src
+cleanupdir	:=	$(SRCDIR)/cleanup
+debugdir	:=	$(SRCDIR)/debug
+gfxdir		:=	$(SRCDIR)/gfx
+parsedir	:=	$(SRCDIR)/parse
+utilsdir	:=	$(SRCDIR)/utils
+
+SRC	:=	$(SRCDIR)/cub3d.c \
+		$(cleanupdir)/freeall.c \
+		$(debugdir)/print.c \
+		$(gfxdir)/window.c \
+		$(parsedir)/parse.c \
+		$(parsedir)/parse_utils.c \
+		$(parsedir)/validate.c \
+		$(parsedir)/validate_utils.c \
+		$(utilsdir)/init_cub3d.c \
+		$(utilsdir)/tabdup.c \
+		$(utilsdir)/write.c
 
 # non-phony targets
 # Object files
-OBJ		=	$(SRC:.c=.o)
-OBJ_DEBUG	=	$(SRC:.c=.o)
+ODIR	:=	obj
+OBJ	:=	$(SRC:%.c=$(ODIR)/%.o)
+# OBJ		=	$(SRC:.c=.o)
+# DEBUGODIR	:=	zobjdir
+# OBJ_DEBUG	=	$(SRC:%.c=$(DEBUGODIR)/%.o)
 
 $(LIBX):
 	@$(MAKE) -sC $(LIBX_DIR)
 
 $(LIBC):
-	@$(MAKE) -sC utils
 	@$(MAKE) -sC $(LIBC_DIR)
 
-$(NAME): $(LIBC) $(OBJ)
-#	@echo "build cflags: $(CFLAGS)"
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ) $(LIBC) $(LIBX) -o $(NAME)
+$(NAME): $(LIBC) $(LIBX) $(OBJ)
+	@$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ) -o $(NAME) $(LIBC) $(LIBX)
 
-$(TARGET_DEBUG): $(LIBC) $(OBJ_DEBUG)
-#	@echo "build cflags: $(CFLAGS)"
-	@$(CC) $(DBGFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ_DEBUG) $(LIBC) $(LIBX) -o $(NAME)
-
-PHONY	+= compiler_info
 # Define a pattern rule that compiles every .c file into a .o file
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
-%.o : %.c | compiler_info
+PHONY	+= compiler_info
+$(ODIR)/%.o : %.c | compiler_info
+	@mkdir -p $(dir $@)
 	@printf "${L_BLUE}[prereq]: ${L_GREEN}%-30s ${L_BLUE}[target]: ${L_GREEN}%s${RESET}\n" "$<" "$@"
 	@$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
@@ -118,7 +133,6 @@ compiler_info:
 	@echo "${L_CYAN}[compiler info]: ${L_MAGENTA}$(CC) -c $(CFLAGS) $(CPPFLAGS)${RESET}"
 
 PHONY	+= checktexture
-
 TEXTURES = east north south west
 checktexture:
 	@for texture in $(TEXTURES); do \
@@ -135,16 +149,20 @@ clean: ## cleans all the obj files
 
 PHONY	+= fclean
 fclean: clean ## uses the rule clean and removes the obsolete files
-	@$(RM) $(NAME) $(OBS)
+	@$(RM) $(NAME) $(ODIR) $(OBS)
 	@$(MAKE) fclean -C $(LIBC_DIR)
-#	@$(MAKE) clean -C $(LIBX_DIR)
+	@$(MAKE) clean -C $(LIBX_DIR)
 
 PHONY	+= re
 re: fclean all ## does fclean and all
 
+# PHONY	+= gcc
+# gcc: CC	:=	gcc ## uses gcc as compiler with the --analyzer flag
+# 	@$(NAME)
+
 PHONY	+= norm
 norm: ## norm for .c/.h files excluding mlx files
-	@norminette -d $(SRC)
+	@norminette $(SRC) $(INC)
 	@echo "all good soilder!"
 
 PHONY	+= info

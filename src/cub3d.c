@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 23:17:12 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/22 13:24:46 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	gfx_setup(t_soul_catcher *game)
 	mlx_loop(game->p_mlx);
 }
 
-int	validate(const int ac, const char * const *av)
+int	validate(const int ac, const char *const *av)
 {
 	if (ac != 2)
 		return (printf("Usage: %s <map_file>\n", av[0]), 1);
@@ -31,7 +31,7 @@ int	validate(const int ac, const char * const *av)
 	return (EXIT_SUCCESS);
 }
 
-int	main(const int ac, const char * const *av)
+int	main(const int ac, const char *const *av)
 {
 	t_soul_catcher	game;
 	t_map			map;

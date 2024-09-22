@@ -6,7 +6,7 @@
 #    By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/08 15:41:48 by myousaf           #+#    #+#              #
-#    Updated: 2024/09/21 21:27:40 by myousaf          ###   ########.fr        #
+#    Updated: 2024/09/22 21:43:05 by myousaf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,29 +34,40 @@ L_YELLOW	:=	\033[0;93m
 L_MAGENTA	:=	\033[0;95m
 
 NAME	:=	libft.a
+UNAME	:=	$(shell uname -s)
 CC		:=	cc
 CFLAGS	:=	-Wall -Wextra -Werror -O3
-# LDFLAGS	:=	-g3 -O2 -fsanitize=address
-ifeq ($(shell uname -s), Linux)
-	CFLAGS += -D LINUX -Wno-unused-result
+
+ifeq ($(UNAME), Darwin) # mac
+	CC		:= cc
+	NUMPROC	:= $(shell sysctl -n hw.ncpu)
+else ifeq ($(UNAME), FreeBSD) # FreeBSD
+	CC	:=	clang
+else ifeq ($(UNAME), Linux) # linux or others
+#	CC	:=	gcc
+	CC		:=	clang-18
+	CFLAGS	+=	-D LINUX -Wno-unused-result
+	NUMPROC	:=	$(shell grep -c ^processor /proc/cpuinfo)
 endif
 
 FR		+=	$(asciidir:%.dSYM)
 FR		+=	$(isdir:%.dSYM)
-FR		+=	$(printf:%.dSYM)
 FR		+=	$(memdir:%.dSYM)
 FR		+=	$(stringdir:%.dSYM)
 FR		+=	$(stringsdir:%.dSYM)
+FR		+=	$(printf:%.dSYM)
+FR		+=	$(gnl:%.dSYM)
 
 RM		:=	rm -fr
 
 asciidir	:=	./ascii
 isdir		:=	./ft_is
-printf		:=	./ft_printf
 memdir		:=	./mem
 stringdir	:=	./string
 stringsdir	:=	./strings
 lstdir		:=	./lst
+printf		:=	./ft_printf
+gnl			:=	./gnl
 
 CFILES	:=	$(asciidir)/atoll.c \
 			$(asciidir)/ft_atoi.c \
@@ -66,16 +77,6 @@ CFILES	:=	$(asciidir)/atoll.c \
 			$(isdir)/ft_isascii.c \
 			$(isdir)/ft_isdigit.c \
 			$(isdir)/ft_isprint.c \
-			$(printf)/ft_char.c \
-			$(printf)/ft_hexa.c \
-			$(printf)/ft_nbr.c \
-			$(printf)/ft_perr.c \
-			$(printf)/ft_printf.c \
-			$(printf)/ft_ptr.c \
-			$(printf)/ft_putchar_fd.c \
-			$(printf)/ft_putendl_fd.c \
-			$(printf)/ft_putnbr_fd.c \
-			$(printf)/ft_putstr_fd.c \
 			$(memdir)/ft_bzero.c \
 			$(memdir)/ft_calloc.c \
 			$(memdir)/ft_memchr.c \
@@ -111,28 +112,37 @@ CFILES	:=	$(asciidir)/atoll.c \
 			$(lstdir)/ft_lstnew.c \
 			$(lstdir)/ft_lstsize.c
 
+CFILES	+=	$(printf)/ft_char.c \
+			$(printf)/ft_hexa.c \
+			$(printf)/ft_nbr.c \
+			$(printf)/ft_perr.c \
+			$(printf)/ft_printf.c \
+			$(printf)/ft_ptr.c \
+			$(printf)/ft_putchar_fd.c \
+			$(printf)/ft_putendl_fd.c \
+			$(printf)/ft_putnbr_fd.c \
+			$(printf)/ft_putstr_fd.c
+
+CFILES	+=	$(gnl)/get_next_line.c \
+			$(gnl)/get_next_line_utils.c
+
 ODIR	:=	zobjdir
 OBJS	:=	$(CFILES:%.c=$(ODIR)/%.o)
 
 .PHONY: all clean fclean re
 
-ifeq ($(UNAME), Linux)
-	NUMPROC := $(shell grep -c ^processor /proc/cpuinfo)
-	@echo $(NUMPROC)
-else ifeq ($(UNAME), Darwin)
-	NUMPROC := $(shell sysctl -n hw.ncpu)
-	@echo $(NUMPROC)
-endif
-
-all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
+# all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
 all:: $(NAME)
 
-
+PHONY	+= compiler_info
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
-$(ODIR)/%.o: %.c
+$(ODIR)/%.o: %.c | compiler_info
 	@mkdir -p $(dir $@)
 #	@printf "${L_BLUE}prereq: ${L_GREEN}%-30s ${L_BLUE}target: ${L_GREEN}%s${RESET}\n" "$<" "$@"
 	@$(CC) $(CFLAGS) -c $< -o $@
+
+compiler_info:
+#	@echo "${L_CYAN}[compiler info]: ${L_MAGENTA}$(CC) -c $(CFLAGS) $(CPPFLAGS)${RESET}"
 
 $(NAME): $(OBJS) $(ODIR)
 	@ar -rcs $(NAME) $(OBJS)
@@ -145,17 +155,14 @@ fclean: clean
 
 re: fclean all
 
-# info: MAKEFLAGS	+=	-j$(NUMPROC)
-info:
-	@echo "# ---------------------------------------------------------------- #"
-	@echo "UNAME		:	${UNAME}"
-	@echo "NUMPROC		:	${NUMPROC}"
-	@echo "MAKEFLAGS	:	${MAKEFLAGS}"
-	@echo "NAME		:	${NAME}"
-	@echo "CC		:	${CC}"
-	@echo "CFLAGS		:	${CFLAGS}"
-	@echo "LDFLAGS		:	${LDFLAGS}"
-	@echo "LIBX		:	${LIBX}"
-	@echo "texture files	:\n	${TEXTTURE_FILES}"
-	@echo "SRC:\n	${CFILES}"
-	@echo "# ---------------------------------------------------------------- #"
+PHONY	+= info
+info: ## prints project based info
+	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
+	@echo "${L_GREEN}NAME${RESET}		:	${L_MAGENTA}${NAME}${RESET}"
+	@echo "${L_GREEN}UNAME${RESET}		:	${L_MAGENTA}${UNAME}${RESET}"
+	@echo "${L_GREEN}NUMPROC${RESET}		:	${L_MAGENTA}${NUMPROC}${RESET}"
+	@echo "${L_GREEN}CC${RESET}		:	${L_MAGENTA}${CC}${RESET}"
+	@echo "${L_GREEN}CFLAGS${RESET}		:	${L_MAGENTA}${CFLAGS}${RESET}"
+	@echo "${L_GREEN}MAKEFLAGS${RESET}	:	${L_MAGENTA}${MAKEFLAGS}${RESET}"
+	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${CFILES}${RESET}"
+	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"

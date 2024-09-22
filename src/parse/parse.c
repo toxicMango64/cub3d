@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 04:38:06 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 21:26:40 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/22 13:26:32 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	set_game_data(t_soul_catcher *game, char *line, char **t_ids)
 
 char	**intit_texture(void)
 {
-	static char *t_id[7] = {"NO", "EA", "WE", "SO", "F", "C", NULL};
+	static char	*t_id[7] = {"NO", "EA", "WE", "SO", "F", "C", NULL};
+
 	return (t_id);
 }
 
