@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/22 21:35:58 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/23 05:29:46 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # endif
 
 # ifdef __linux__
-#  include "../minilibx/linux/mlx.h"
+#  include "../minilibx/minilibx-linux/mlx.h"
 #  include <linux/limits.h>
 #  define ESC 65307
 #  define W 119

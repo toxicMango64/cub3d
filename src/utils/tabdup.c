@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 21:04:10 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/23 01:27:47 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/23 05:30:41 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,47 +78,6 @@ static char	check_char(char c)
 	return (zero);
 }
 
-// char **ft_tabdup(char **tab, char fill_char)
-// {
-// 	int y;
-// 	int x;
-// 	char **duped_tab = NULL;
-// 	char *line;
-
-// 	y = -1;
-// 	while (tab[++y])
-// 	{
-// 		line = NULL;
-// 		x = -1;
-// 		while (tab[y][++x])
-// 		{
-// 			if (!fill_char)
-// 				line = ft_strac(line, tab[y][x]);
-// 			else
-// 				line = ft_strac(line, check_char(tab[y][x]));
-// 			if (!line) // Check for allocation failure
-// 			{
-// 				// Free previously allocated memory
-// 				for (int j = 0; j < y; j++)
-// 					free(duped_tab[j]);
-// 				free(duped_tab);
-// 				return (NULL);
-// 			}
-// 		}
-// 		duped_tab = ft_tabjoin(duped_tab, line);
-// 		if (!duped_tab) // Check for allocation failure
-// 		{
-// 			free(line);
-// 			for (int j = 0; j <= y; j++) // Free previously allocated lines
-// 				free(duped_tab[j]); // Freeing the joined tab
-// 			return (NULL);
-// 		}
-// 		free(line); // Free line after it has been joined
-// 		y++;
-// 	}
-// 	return (duped_tab);
-// }
-
 char	**ft_tabdup(char **tab, char fill_char)
 {
 	int		y;
@@ -143,7 +102,7 @@ char	**ft_tabdup(char **tab, char fill_char)
 		}
 		duped_tab = ft_tabjoin(duped_tab, line);
 		if (!duped_tab)
-			return (free(line), freearr(duped_tab), NULL);
+			return (free(line), NULL);
 		free(line);
 	}
 	return (duped_tab);

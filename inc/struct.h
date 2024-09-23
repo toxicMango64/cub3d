@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/22 13:38:42 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/23 05:25:53 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 /** STRUCTURES **/
 typedef struct s_point
 {
-	int		x;
-	int		y;
-	char	direction;
+	double		x;
+	double		y;
+	char		direction;
 }	t_point;
 
 typedef struct s_textures
