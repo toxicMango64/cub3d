@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/23 05:29:46 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/24 21:12:03 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,29 @@
 
 # define TRUE 1
 # define FALSE 0
+
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <dlfcn.h>
+#include <time.h>
+
+// # define malloc(...) NULL // to fail malloc
+// void* malloc(size_t size) {
+//    static int times_called;
+// 	++times_called;
+
+// 	// {
+// 	// 	srand(time(NULL));
+// 	// }
+
+// 	if (times_called % 3)
+// 			return NULL;
+
+// 	// Call the original malloc
+// 	void* (*original_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
+// 	return (original_malloc(size));
+// }
 
 # define WHITESPACE	" \v\t\f\r\n"
 // # define DW		125
@@ -64,7 +87,7 @@
 void	init_soul_catcher(t_soul_catcher *game, t_point *player, t_map *map, \
 		t_textures *textures);
 int		validate(const int ac, const char *const *av);
-int		map_signature_check(const char *path_to_map);
+int		file_signature_check(int case_n, char *t_file);
 
 // Handlers
 int		handle_destroy(t_soul_catcher *game);

@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 04:34:59 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/23 01:06:22 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/24 21:03:15 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,20 @@
 // 	return (0);
 // }
 
-int	handle_destroy(t_soul_catcher *game)
-{
-	mlx_destroy_window(game->p_mlx, game->p_win);
-	free(game->p_mlx);
-	close(game->map->fd);
-	free_textures(game->textures);
-	freearr(game->map->grid);
-	exit(0);
-	return (0);
-}
+// int	handle_destroy(t_soul_catcher *game)
+// {
+// 	mlx_destroy_window(game->p_mlx, game->p_win);
+// 	free(game->p_mlx);
+// 	close(game->map->fd);
+// 	free_textures(game->textures);
+// 	freearr(game->map->grid);
+// 	exit(0);
+// 	return (0);
+// }
 
-int	handle_keypress(int keysym, t_soul_catcher *game)
-{
-	if (keysym == ESC)
-		return (handle_destroy(game));
-	return (0);
-}
+// int	handle_keypress(int keysym, t_soul_catcher *game)
+// {
+// 	if (keysym == ESC)
+// 		return (handle_destroy(game));
+// 	return (0);
+// }
