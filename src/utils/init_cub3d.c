@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 06:42:14 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 19:40:10 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/26 02:35:39 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	init_textures(t_textures *textures)
 void	init_point(t_point *player)
 {
 	player->direction = '\0';
-	player->x = '\0';
-	player->y = '\0';
+	player->spawn_x = '\0';
+	player->spawn_y = '\0';
 }
 
 /** Initialize game state */

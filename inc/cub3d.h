@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/23 05:29:46 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/26 02:34:20 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # define FALSE 0
 
 # define WHITESPACE	" \v\t\f\r\n"
+# define FILEOPEN	"Error opening file: Failed to open"
+# define GAMEWIDTH	1280
+# define GAMEHEIGHT	720
 // # define DW		125
 // # define UP		126
 // # define Q		12
@@ -52,6 +55,7 @@
 # include "../zlibc/libft.h"
 # include "struct.h"
 # include <unistd.h>
+# include <math.h>
 # include <fcntl.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -64,7 +68,7 @@
 void	init_soul_catcher(t_soul_catcher *game, t_point *player, t_map *map, \
 		t_textures *textures);
 int		validate(const int ac, const char *const *av);
-int		file_signature_check(int case_n, const char *t_file);
+int		file_signature_check(int case_n, const char *t_file, const char *prog);
 
 // Handlers
 int		handle_destroy(t_soul_catcher *game);

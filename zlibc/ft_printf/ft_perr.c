@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 19:56:25 by myousaf           #+#    #+#             */
-/*   Updated: 2024/05/02 15:37:57 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/25 23:11:37 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,30 @@ void	ft_border(size_t i)
 	write(1, "\n", 1);
 }
 
+// does not exit with int status anymore
 void	perr(char *str, int int_status)
 {
 	size_t	i;
 
+	(void)int_status;
 	i = ft_strlen(str) + 13;
 	ft_border(i);
 	ft_printf(" Error ya: ");
 	ft_printf("%s\n", str);
 	ft_border(i);
-	exit (int_status);
 }
+
+// void	perr(char *str, int int_status)
+// {
+// 	size_t	i;
+
+// 	i = ft_strlen(str) + 13;
+// 	ft_border(i);
+// 	ft_printf(" Error ya: ");
+// 	ft_printf("%s\n", str);
+// 	ft_border(i);
+// 	exit (int_status);
+// }
 
 void	mperr(char *str)
 {

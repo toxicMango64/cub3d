@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/23 01:20:26 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/26 02:29:38 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	validate(const int ac, const char *const *av)
 {
 	if (ac != 2)
 		return (printf("Usage: %s <map_file>\n", av[0]), 1);
-	if (file_signature_check(1, av[1]))
+	if (file_signature_check(1, av[1], av[0]))
 		exit (-1);
 	return (EXIT_SUCCESS);
 }
@@ -32,16 +32,44 @@ int	validate(const int ac, const char *const *av)
 // 	return (0);
 // }
 
-// void	gfx_setup(t_soul_catcher *game)
-// {
-// 	game->p_mlx = mlx_init();
-// 	game->p_win = mlx_new_window(game->p_mlx, 1280, 720, "cub3D");
-// 	printf("<<<<<<HERE>>>>>>\n");
-// 	mlx_hook(game->p_win, 17, 0, close_x, &game);
-// 	mlx_hook(game->p_win, 17, 1L << 2, handle_destroy, &game);
-// 	mlx_hook(game->p_win, 2, 1L << 0, handle_keypress, &game);
-// 	mlx_loop(game->p_mlx);
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+int	close_win(t_soul_catcher *game)
+{
+	mlx_destroy_window(game->p_mlx, game->p_win);
+	free(game->p_mlx);
+	printf("<<<<<<HERE>>>>>>\n");
+	// close_free(game);
+	exit(0);
+	return (0);
+}
+
+void	gfx_setup(t_soul_catcher *game)
+{
+
+	game->p_mlx = mlx_init();
+	game->p_win = mlx_new_window(game->p_mlx, GAMEWIDTH, GAMEHEIGHT, "cub3D");
+
+
+	// mlx_loop(game->p_mlx);
+	// mlx_hook(game->p_win, 17, 0, close_win, &game);
+	// mlx_hook(game->p_win, 17, 1L << 2, handle_destroy, &game);
+	// mlx_hook(game->p_win, 2, 1L << 0, handle_keypress, &game);
+	// mlx_loop(game->p_mlx);
+}
+
+
 
 int	main(const int ac, const char *const *av)
 {
@@ -60,6 +88,6 @@ int	main(const int ac, const char *const *av)
 		return (close(game.map->fd), free(game.map->full), \
 			freearr(map.grid), free_textures(game.textures), EXIT_FAILURE);
 	print_info(*game.textures, map);
-	// gfx_setup(&game);
+	gfx_setup(&game);
 	return (EXIT_SUCCESS);
 }
