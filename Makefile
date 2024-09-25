@@ -4,7 +4,7 @@
 UNAME	=	$(shell uname -s)
 NAME	=	cub3d
 RM		=	rm -fr
-CFLAGS	+=	-Wall -Wextra -Werror -Ofast -Iinc
+CFLAGS	+=	-Wall -Wextra -Werror -O3 -ffast-math -Iinc
 
 OBS		+=	cub3d.dSYM	\
 			.DS_Store \
@@ -13,7 +13,7 @@ OBS		+=	cub3d.dSYM	\
 ifeq ($(UNAME), Darwin) # mac
   CC	:= gcc
 else ifeq ($(UNAME), Linux) # linux
-  CC	:=	clang
+  CC	:=	clang-19
 else # or others
 	@echo "unsupported OS"
 	@exit (1);
@@ -74,7 +74,7 @@ L			:=	m
 # --------------------------------------------------------------------------- #"
 
 # # Source files
-SRCDIR		:=	./src
+SRCDIR		:=	src
 cleanupdir	:=	$(SRCDIR)/cleanup
 debugdir	:=	$(SRCDIR)/debug
 gfxdir		:=	$(SRCDIR)/gfx
@@ -170,33 +170,32 @@ info: ## prints project based info
 	@echo "${L_GREEN}CPPFLAGS${RESET}	:	${L_MAGENTA}${CPPFLAGS}${RESET}"
 	@echo "${L_GREEN}MAKEFLAGS${RESET}	:	${L_MAGENTA}${MAKEFLAGS}${RESET}"
 	@echo "${L_GREEN}LIBX${RESET}		:	${L_MAGENTA}${LIBX}${RESET}"
-	@echo "${L_GREEN}texture files${RESET}	:\n	${L_BLUE}${TEXTURE_FILES}${RESET}"
+#	@echo "${L_GREEN}texture files${RESET}	:\n	${L_BLUE}${TEXTURE_FILES}${RESET}"
 	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${SRC}${RESET}"
 	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
-
-PHONY	+= scan
-scan: ## uses scan-build on make all (prerequisite clan-18)
-	@$(shell scan-build-18 $(MAKE))
-
-PHONY	+= run
-run: ## runs a test case for you "./cub3D maps/map.cub"
-	@$(shell ./cub3D maps/map.cub)
 
 PHONY	+= help
 help: ## prints a list of the possible commands
 	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
-	@echo "${L_MAGENTA}Usage:${RESET}"
+#	@echo "${L_MAGENTA}Usage:${RESET} make [<option>...]"
+	@printf "${L_MAGENTA}%-15s ${RESET}${L_BLUE}make [<option>...]${RESET}\n\n" "Usage:"
 #	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
+	@printf "${L_MAGENTA}Option:${RESET}\n"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
-	{printf "${L_GREEN}%-20s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
+	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
+	
+#	start of command message
+#	@printf "\n${L_MAGENTA}%-15s ${RESET}${L_BLUE}make [<option>...]${RESET}\n" "Commands:"
+	@printf "%-15s ${L_BLUE}This MAKE has Super Cow Powers.${RESET}\n"
+#	@printf "${L_MAGENTA}%-15s ${RESET}${L_BLUE}This MAKE has Super Cow Powers.${RESET}\n"
 	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 
 .DEFAULT:
-	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
-	@echo "${L_RED}[Error]:${RESET} ${L_BLUE}\tUnknown target '$@'."
-	@echo ""
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
-	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
-	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+#	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
+	@echo "${L_RED}[Error]${RESET}: ${L_BLUE}\tUnknown target '${L_RED}$@${L_BLUE}'.${RESET}"
+	@${MAKE} -s help
+#	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
+#	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
+#	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 
 .PHONY: $(PHONY)

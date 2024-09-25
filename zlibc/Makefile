@@ -6,7 +6,7 @@
 #    By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/08 15:41:48 by myousaf           #+#    #+#              #
-#    Updated: 2024/09/24 20:57:19 by myousaf          ###   ########.fr        #
+#    Updated: 2024/09/22 21:43:05 by myousaf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,13 +41,13 @@ CFLAGS	:=	-Wall -Wextra -Werror -O3
 ifeq ($(UNAME), Darwin) # mac
 	CC		:= cc
 	NUMPROC	:= $(shell sysctl -n hw.ncpu)
+else ifeq ($(UNAME), FreeBSD) # FreeBSD
+	CC	:=	clang
 else ifeq ($(UNAME), Linux) # linux or others
 #	CC	:=	gcc
 	CC		:=	clang-19
 	CFLAGS	+=	-D LINUX -Wno-unused-result
 	NUMPROC	:=	$(shell grep -c ^processor /proc/cpuinfo)
-else ifeq ($(UNAME), FreeBSD) # FreeBSD
-	CC	:=	clang
 endif
 
 FR		+=	$(asciidir:%.dSYM)

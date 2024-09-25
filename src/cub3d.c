@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/24 21:27:04 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/23 01:20:26 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	validate(const int ac, const char *const *av)
 {
 	if (ac != 2)
 		return (printf("Usage: %s <map_file>\n", av[0]), 1);
-	if (file_signature_check(1, (char *)av[1]))
+	if (map_signature_check(av[1]))
 		exit (-1);
 	return (EXIT_SUCCESS);
 }
@@ -59,7 +59,7 @@ int	main(const int ac, const char *const *av)
 	if (is_map_valid(&game))
 		return (close(game.map->fd), free(game.map->full), \
 			freearr(map.grid), free_textures(game.textures), EXIT_FAILURE);
-	// print_info(*game.textures, map);
+	print_info(*game.textures, map);
 	// gfx_setup(&game);
 	return (EXIT_SUCCESS);
 }
