@@ -17,7 +17,7 @@ int	validate(const int ac, const char *const *av)
 {
 	if (ac != 2)
 		return (printf("Usage: %s <map_file>\n", av[0]), 1);
-	if (map_signature_check(av[1]))
+	if (file_signature_check(1, av[1]))
 		exit (-1);
 	return (EXIT_SUCCESS);
 }

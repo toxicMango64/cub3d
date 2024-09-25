@@ -13,17 +13,19 @@
 #include "cub3d.h"
 
 // cub3D: Error opening archive: Error reading 'maps'
-int	map_signature_check(const char *path_to_map)
+int	file_signature_check(int case_n, const char *t_file)
 {
 	int		fd;
 	ssize_t	offset;
 
 	offset = 0;
-	while (path_to_map[offset] != '\0')
+	while (t_file[offset] != '\0')
 		offset++;
-	if (strcmp_sst(path_to_map, ".cub", offset - 4) != 0)
-		return (printf("cub3d: unknown suffix -- ignored"));
-	fd = open(path_to_map, O_RDONLY);
+	if (1 == case_n && strcmp_sst(t_file, ".cub", offset - 4))
+		return (printf("cub3d: unknown suffix '%s' -- ignored", t_file));
+	else if (2 == case_n && strcmp_sst(t_file, ".xpm", offset - 4))
+		return (printf("cub3d: unknown suffix '%s' -- ignored", t_file));
+	fd = open(t_file, O_RDONLY);
 	if (fd == -1)
 		return (printf("cub3d: Error opening file: Error reading 'map'"));
 	close(fd);

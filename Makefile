@@ -44,6 +44,7 @@ LIBC_DIR	=	zlibc
 LIBC		=	$(LIBC_DIR)/libft.a
 LIBX		=	$(LIBX_DIR)/libmlx.a
 LDFLAGS		+=	-L$(LIBC_DIR) -lft
+SANITIZE	=	-fsanitize=address
 
 # **************************************************************************** #
 # Define the colors
@@ -97,13 +98,18 @@ SRC	:=	$(SRCDIR)/cub3d.c \
 ODIR	:=	obj
 OBJ		:=	$(SRC:%.c=$(ODIR)/%.o)
 
+SANITIZED_FLAG	=	.sanitized
+
 PHONY	+= all clean info
 mode	?=
 ifeq ($(mode), debug)
-  CFLAGS	+=	-g3 -fsanitize=address
-  all: clean compiler_info $(NAME) info
+  CFLAGS	+=	$(SANITIZE) -g3
+
+  all: clean build_info $(NAME) info
+
 else
-  all: $(NAME) cubEd ## builds the project
+  all: $(NAME) cubED ## builds the project
+
 endif
 
 # non-phony targets
@@ -118,13 +124,13 @@ $(NAME): $(LIBC) $(LIBX) $(OBJ)
 
 # Define a pattern rule that compiles every .c file into a .o file
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
-PHONY	+= compiler_info
+PHONY	+= build_info
 $(ODIR)/%.o : %.c
 	@mkdir -p $(dir $@)
 	@printf "${L_BLUE}[prereq]: ${L_GREEN}%-30s ${L_BLUE}[target]: ${L_GREEN}%s${RESET}\n" "$<" "$@"
 	@$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
-compiler_info:
+build_info:
 	@echo "${L_CYAN}[compiler info]: ${L_MAGENTA}$(CC) -c $(CFLAGS) $(CPPFLAGS)${RESET}"
 
 PHONY	+= clean
@@ -148,7 +154,7 @@ norm: ## norm for .c/.h files excluding mlx files
 
 PHONY	+=	cubEd
 SHIFT	=	$(eval O=$(shell echo $$((($(O)%15)+1))))
-cubEd:
+cubED:
 	@echo "$(C)$(O)$(L) ______     __  __     ______     ______     _____    ";
 	@echo "$(C)$(O)$(L)/\  ___\   /\ \/\ \   /\  == \   /\___  \   /\  __ \  ";
 	$(SHIFT)
@@ -170,7 +176,7 @@ info: ## prints project based info
 	@echo "${L_GREEN}CPPFLAGS${RESET}	:	${L_MAGENTA}${CPPFLAGS}${RESET}"
 	@echo "${L_GREEN}MAKEFLAGS${RESET}	:	${L_MAGENTA}${MAKEFLAGS}${RESET}"
 	@echo "${L_GREEN}LIBX${RESET}		:	${L_MAGENTA}${LIBX}${RESET}"
-#	@echo "${L_GREEN}texture files${RESET}	:\n	${L_BLUE}${TEXTURE_FILES}${RESET}"
+	@echo "${L_GREEN}BUILD MODE${RESET}	:	${L_BLUE}${mode}${RESET}"
 	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${SRC}${RESET}"
 	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
 

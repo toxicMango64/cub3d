@@ -64,7 +64,7 @@
 void	init_soul_catcher(t_soul_catcher *game, t_point *player, t_map *map, \
 		t_textures *textures);
 int		validate(const int ac, const char *const *av);
-int		map_signature_check(const char *path_to_map);
+int		file_signature_check(int case_n, const char *t_file);
 
 // Handlers
 int		handle_destroy(t_soul_catcher *game);
