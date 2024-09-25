@@ -43,7 +43,7 @@ endif
 LIBC_DIR	=	zlibc
 LIBC		=	$(LIBC_DIR)/libft.a
 LIBX		=	$(LIBX_DIR)/libmlx.a
-LDFLAGS		+=	-L$(LIBC_DIR) -lft
+LDFLAGS		+=	-L$(LIBC_DIR)
 SANITIZE	=	-fsanitize=address
 
 # **************************************************************************** #
@@ -151,6 +151,10 @@ PHONY	+= norm
 norm: ## norm for .c/.h files excluding mlx files
 	@norminette $(SRC) $(INC)
 	@echo "all good soilder!"
+
+PHONY	+= libx
+libx: ## rebuilds the minilibx directory for the OS
+	@$(MAKE) re -sC $(LIBX_DIR)
 
 PHONY	+=	cubEd
 SHIFT	=	$(eval O=$(shell echo $$((($(O)%15)+1))))

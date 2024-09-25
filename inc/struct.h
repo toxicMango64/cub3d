@@ -89,7 +89,7 @@ typedef struct s_game
 	t_map		*map;
 	t_textures	*textures;
 	t_point		*player_pos;
-	t_ray		*ray
+	t_ray		*ray;
 }	t_soul_catcher;
 
 typedef enum e_texture_types

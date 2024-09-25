@@ -37,7 +37,7 @@ int	is_surrounded_by_walls(t_soul_catcher *game, t_point *player_pos)
 	char	**visited;
 
 	visited = ft_tabdup(game->map->grid, 1);
-	if (!is_closed(game, visited, player_pos->x, player_pos->y))
+	if (!is_closed(game, visited, player_pos->spawn_x, player_pos->spawn_y))
 		return (freearr(visited), wrerr("Map must be surrounded by walls"));
 	freearr(visited);
 	return (EXIT_SUCCESS);

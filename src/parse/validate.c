@@ -16,8 +16,8 @@ int	update_player(t_soul_catcher *game, int x, int y)
 {
 	if (game->player_pos->direction)
 		return (wrerr("Multiple players found"));
-	game->player_pos->y = y;
-	game->player_pos->x = x;
+	game->player_pos->spawn_y = y;
+	game->player_pos->spawn_x = x;
 	game->player_pos->direction = game->map->grid[y][x];
 	return (EXIT_SUCCESS);
 }
