@@ -6,13 +6,13 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:10:29 by myousaf           #+#    #+#             */
-/*   Updated: 2024/04/09 06:12:55 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/26 04:55:34 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_putchar_fd(char c, int fd)
+int	ft_putchar_fd(char c, int fd)
 {
-	write(fd, &c, 1);
+	return (write(fd, &c, 1));
 }
