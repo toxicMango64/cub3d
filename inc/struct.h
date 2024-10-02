@@ -1,4 +1,3 @@
-#include "debug.h"
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/26 14:15:46 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 21:31:26 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +14,7 @@
 # define STRUCT_H
 
 # include "../zlibc/libft.h"
+// #include "debug.h"
 
 /** STRUCTURES **/
 typedef struct s_point
@@ -99,7 +99,6 @@ typedef struct s_draw
 	double	step;
 	double	texpos;
 }	t_draw;
-
 
 typedef struct s_game
 {

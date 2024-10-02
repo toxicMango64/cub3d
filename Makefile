@@ -4,7 +4,7 @@
 UNAME	=	$(shell uname -s)
 NAME	=	cub3d
 RM		=	rm -fr
-CFLAGS	+=	-Wall -Wextra -Werror -O3 -ffast-math -Iinc
+CFLAGS	+=	-Wall -Wextra -Werror -O3 -ffast-math -Iinc #-g3 -fsanitize=address
 
 OBS		+=	cub3d.dSYM	\
 			.DS_Store \
@@ -88,32 +88,23 @@ SRC	:=	$(SRCDIR)/cub3d.c \
 		$(debugdir)/debug.c \
 		$(utilsdir)/cleanup.c \
 		$(utilsdir)/init_cub3d.c \
+		$(utilsdir)/gfx_cleanup.c \
 		$(utilsdir)/utils.c \
 		$(parsedir)/parse.c \
 		$(parsedir)/parse_utils.c \
-		$(validdir)/map_validation.c \
-		$(validdir)/validation_utils.c
-
-# SRC	:=	$(SRCDIR)/cub3d.c \
-# 		$(cleanupdir)/freeall.c \
-# 		$(gfxdir)/window.c \
-# 		$(parsedir)/parse.c \
-# 		$(parsedir)/validate.c \
-# 		$(parsedir)/validate_utils.c \
-# 		$(parsedir)/map_parser.c \
-# 		$(utilsdir)/parse_utils.c \
-# 		$(gfxdir)/direction.c \
-# 		$(gfxdir)/draw_utils.c \
-# 		$(gfxdir)/draw_wall.c \
-# 		$(gfxdir)/exec.c \
-# 		$(gfxdir)/keymap.c \
-# 		$(gfxdir)/movement.c \
-# 		$(gfxdir)/raycast.c \
-# 		$(gfxdir)/wallcolli.c \
-# 		$(gfxdir)/init_mlx.c \
-# 		$(gfxdir)/exit_utils.c \
-# 		$(gfxdir)/init_tex.c \
-# 		$(gfxdir)/utils.c
+		$(validdir)/valid_map.c \
+		$(validdir)/map_utils.c \
+		$(gfxdir)/init_gfx.c \
+		$(gfxdir)/gfx_init_utils.c \
+		$(gfxdir)/init_xpm.c \
+		$(gfxdir)/direction.c \
+		$(gfxdir)/raycast.c \
+		$(gfxdir)/draw_utils.c \
+		$(gfxdir)/gfx_utils.c \
+		$(gfxdir)/draw_wall.c \
+		$(gfxdir)/keymap.c \
+		$(gfxdir)/movement.c \
+		$(gfxdir)/wallcolli.c
 
 # Object files
 ODIR	:=	obj
@@ -225,3 +216,9 @@ help: ## prints a list of the possible commands
 #	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
 
 .PHONY: $(PHONY)
+
+
+# NO ./texture/north-StoneUWcrossL.xpm
+# SO ./texture/south-StoneUWflagL.xpm
+# WE ./texture/west-StoneUWHitlerD.xpm
+# EA ./texture/east-StoneUWD.xpm

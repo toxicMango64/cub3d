@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 17:37:09 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 21:21:47 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,24 @@ int	validate(const int ac, const char *const *av)
 	if (file_signature_check(MAP, av[1]))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
+}
+
+static int	game_loop(t_soul_catcher *game)
+{
+	if (game->draw_flag == 0)
+		return (0);
+	calculate_ray(game);
+	return (1);
+}
+
+void	exec_game(t_soul_catcher *game)
+{
+	init_gfx(game);
+	game->draw_flag = 1;
+	mlx_loop_hook(game->p_mlx, game_loop, game);
+	mlx_hook(game->p_win, 2, 1L << 0, key_move, game);
+	mlx_hook(game->p_win, 17, 1L << 17, close_game, game);
+	mlx_loop(game->p_mlx);
 }
 
 int	main(const int ac, const char *const *av)
@@ -41,6 +59,6 @@ int	main(const int ac, const char *const *av)
 	if (is_map_valid(game))
 		return (free_soul_catcher(game), EXIT_FAILURE);
 	print_info(game->textures, game->map);
-	// exec_game(game);
+	exec_game(game);
 	return (EXIT_SUCCESS);
 }

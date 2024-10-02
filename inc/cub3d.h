@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 18:12:37 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:51:46 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@
 
 # include "../zlibc/libft.h"
 # include "struct.h"
+# include "gfx.h"
 # include <unistd.h>
 # include <math.h>
 # include <fcntl.h>
@@ -68,6 +69,7 @@
 /**  game state Initialize */
 int		init_soul_catcher(t_soul_catcher *game);
 void	free_soul_catcher(t_soul_catcher *game);
+void	free_textures(t_textures *textures);
 
 // parse.c
 int		extractfile(t_soul_catcher *game, char *line, int fd);
@@ -85,10 +87,10 @@ int		__check_color(t_soul_catcher *game, char **c_hex, char **color_value, \
 		int i);
 int		count_commas(char *str);
 
-// map_validation.c
+// valid_map.c
 int		is_map_valid(t_soul_catcher *game);
 
-// validation_utils.c
+// map_utils.c
 int		update_player(t_soul_catcher *game, int x, int y);
 int		help_check_zero_surrounding(char **map, int y, int x);
 

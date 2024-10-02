@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 16:01:44 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 17:49:56 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 21:30:48 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	count_commas(char *str)
 	}
 	return (count);
 }
-
 
 // check if the texture/color name is valid
 int	valid_txture_color_name(char **t_ids, char *txture_color)
