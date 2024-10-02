@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/26 02:34:20 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:12:37 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,25 @@
 # define FALSE 0
 
 # define WHITESPACE	" \v\t\f\r\n"
-# define FILEOPEN	"Error opening file: Failed to open"
+# define FOPEN	"Error opening file: Failed to open"
 # define GAMEWIDTH	1280
 # define GAMEHEIGHT	720
-// # define DW		125
-// # define UP		126
-// # define Q		12
+# define F	4
+# define C	5
 
-// # ifdef OSX
 # ifdef __APPLE__
 #  include <../minilibx/opengl/mlx.h>
-// #  include <../minilibx/minilibx/mlx.h>
 #  include <limits.h>
 #  define ESC 53
 #  define W 13
 #  define A 0
 #  define S 1
 #  define D 2
-#  define LEFT 123
-#  define RIGHT 124
+#  define L 123
+#  define R 124
 #  define SHIFT 257
+#  define MOVE_SPEED 0.06
+#  define ROTATE_SPEED 0.035
 # endif
 
 # ifdef __linux__
@@ -50,6 +49,8 @@
 #  define LEFT 65361
 #  define L 123
 #  define R 124
+#  define MOVE_SPEED 0.06
+#  define ROTATE_SPEED 0.035
 # endif
 
 # include "../zlibc/libft.h"
@@ -64,31 +65,31 @@
  * FUNCTION PROTOTYPES *
  * ******************* */
 
-// Setup
-void	init_soul_catcher(t_soul_catcher *game, t_point *player, t_map *map, \
-		t_textures *textures);
-int		validate(const int ac, const char *const *av);
-int		file_signature_check(int case_n, const char *t_file, const char *prog);
+/**  game state Initialize */
+int		init_soul_catcher(t_soul_catcher *game);
+void	free_soul_catcher(t_soul_catcher *game);
 
-// Handlers
-int		handle_destroy(t_soul_catcher *game);
-int		handle_keypress(int keysym, t_soul_catcher *game);
+// parse.c
+int		extractfile(t_soul_catcher *game, char *line, int fd);
 
-// Parsing
-int		update_map(t_soul_catcher *game, char *processed_line, char *line);
-int		assign_texture(t_texture_type type, char *texture, \
-		t_soul_catcher *game);
+// parse_utils.c
+int		file_signature_check(int case_n, const char *t_file);
+int		is_set(t_soul_catcher *game, char **attribute_arr);
+int		check_invalid_char(char *map_line);
+int		update_map(t_soul_catcher *game, char *line);
+
+// utils.c functions
+int		valid_txture_color_name(char **t_ids, char *txture_color);
+int		are_all_txtures_colors_set(t_textures *textures);
+int		__check_color(t_soul_catcher *game, char **c_hex, char **color_value, \
+		int i);
+int		count_commas(char *str);
+
+// map_validation.c
 int		is_map_valid(t_soul_catcher *game);
-int		extractfile(t_soul_catcher *game, int fd);
-int		is_surrounded_by_walls(t_soul_catcher *game, t_point *player_pos);
 
-char	**intit_texture(void);
-int		set_game_data(t_soul_catcher *game, char *line, char **t_ids);
-int		wrerr(const char *str);
-int		wr(const char *str);
-char	**ft_tabdup(char **tab, char fill_char);
-
-// Cleanup
-void	free_textures(t_textures *textures);
+// validation_utils.c
+int		update_player(t_soul_catcher *game, int x, int y);
+int		help_check_zero_surrounding(char **map, int y, int x);
 
 #endif

@@ -18,5 +18,6 @@
 int			ft_atoi(const char *str);
 char		*ft_itoa(int n);
 long long	ft_atoll(const char *str);
+int         ft_atoi_rgb(const char *str);
 
 #endif

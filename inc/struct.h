@@ -1,3 +1,4 @@
+#include "debug.h"
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -6,7 +7,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/26 02:32:23 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/26 14:15:46 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,57 +40,85 @@ typedef struct s_map
 	int		floor_color[3];
 	int		ceiling_color[3];
 	int		width;
+	int		height;
 	char	*full;
 	char	**grid;
 }	t_map;
 
+typedef struct s_img
+{
+	void		*ptr;
+	char		*adr;
+	char		dir;
+	int			endian;
+	int			bpp;
+	int			len;
+	int			width;
+	int			height;
+}	t_img;
+
 typedef struct s_ray
 {
-	double			pos_x;
-	double			pos_y;
-	double			dir_x;
-	double			dir_y;
-	double			plane_x;
-	double			plane_y;
-	double			camera_x;
-	double			ray_dir_x;
-	double			ray_dir_y;
-	int				map_x;
-	int				map_y;
-	double			side_dist_x;
-	double			side_dist_y;
-	double			delta_dist_x;
-	double			delta_dist_y;
-	double			perp_wall_dist;
-	int				step_x;
-	int				step_y;
-	int				hit;
-	int				side;
-	double			step_size;
-	double			const_rad;
-	int				line_height;
-	int				draw_start;
-	int				draw_end;
-	double			wall_x;
-	int				x_tex;
-	double			y_tex;
-	double			y_tex_step;
-	int				forward;
-	int				backwards;
-	int				left;
-	int				right;
-	int				rot_left;
-	int				rot_right;
+	double	camera_x;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	int		map_x;
+	int		map_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	perp_wall_dist;
+	int		step_x;
+	int		step_y;
+	int		hit;
+	int		side;
 }	t_ray;
+
+typedef struct s_player
+{
+	char	facing;
+	int		x;
+	int		y;
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+}	t_player;
+
+typedef struct s_draw
+{
+	int		line_h;
+	int		draw_start;
+	int		draw_end;
+	int		tex_x;
+	int		tex_y;
+	double	wall_x;
+	double	step;
+	double	texpos;
+}	t_draw;
+
 
 typedef struct s_game
 {
-	int			*p_mlx;
-	int			*p_win;
+	void		*p_mlx;
+	void		*p_win;
 	t_map		*map;
 	t_textures	*textures;
 	t_point		*player_pos;
+
+	//added
 	t_ray		*ray;
+	t_player	*player;
+	t_img		frame;
+	t_img		north;
+	t_img		south;
+	t_img		west;
+	t_img		east;
+	int			draw_flag;
+
 }	t_soul_catcher;
 
 typedef enum e_texture_types
@@ -99,7 +128,9 @@ typedef enum e_texture_types
 	WEST,
 	SOUTH,
 	FLOOR,
-	CEILING
+	CEILING,
+	MAP,
+	TEXTURE
 }	t_texture_type;
 
 #endif

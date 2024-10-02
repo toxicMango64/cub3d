@@ -32,5 +32,6 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 ssize_t	strcmp_sst(const char *s1, const char *s2, ssize_t n);
+int     ft_strcmp(const char *s1, const char *s2);
 
 #endif

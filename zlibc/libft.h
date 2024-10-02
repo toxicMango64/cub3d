@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 14:20:02 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/22 16:44:14 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:09:18 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@
 # include "ascii/ascii.h"
 # include "ft_is/ft_is.h"
 # include "string/string.h"
+# include "utils/utils.h"
 
 #endif

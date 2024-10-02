@@ -11,7 +11,7 @@ OBS		+=	cub3d.dSYM	\
 			.vscode
 
 ifeq ($(UNAME), Darwin) # mac
-  CC	:= gcc
+  CC	:= cc
 else ifeq ($(UNAME), Linux) # linux
   CC	:=	clang-19
 else # or others
@@ -74,25 +74,46 @@ L			:=	m
 
 # --------------------------------------------------------------------------- #"
 
-# # Source files
+# Source files
 SRCDIR		:=	src
 cleanupdir	:=	$(SRCDIR)/cleanup
 debugdir	:=	$(SRCDIR)/debug
 gfxdir		:=	$(SRCDIR)/gfx
 parsedir	:=	$(SRCDIR)/parse
 utilsdir	:=	$(SRCDIR)/utils
+validdir	:=	$(SRCDIR)/validation
+gfxdir		:=  $(SRCDIR)/gfx
 
 SRC	:=	$(SRCDIR)/cub3d.c \
-		$(cleanupdir)/freeall.c \
-		$(debugdir)/print.c \
-		$(gfxdir)/window.c \
+		$(debugdir)/debug.c \
+		$(utilsdir)/cleanup.c \
+		$(utilsdir)/init_cub3d.c \
+		$(utilsdir)/utils.c \
 		$(parsedir)/parse.c \
 		$(parsedir)/parse_utils.c \
-		$(parsedir)/validate.c \
-		$(parsedir)/validate_utils.c \
-		$(utilsdir)/init_cub3d.c \
-		$(utilsdir)/tabdup.c \
-		$(utilsdir)/write.c
+		$(validdir)/map_validation.c \
+		$(validdir)/validation_utils.c
+
+# SRC	:=	$(SRCDIR)/cub3d.c \
+# 		$(cleanupdir)/freeall.c \
+# 		$(gfxdir)/window.c \
+# 		$(parsedir)/parse.c \
+# 		$(parsedir)/validate.c \
+# 		$(parsedir)/validate_utils.c \
+# 		$(parsedir)/map_parser.c \
+# 		$(utilsdir)/parse_utils.c \
+# 		$(gfxdir)/direction.c \
+# 		$(gfxdir)/draw_utils.c \
+# 		$(gfxdir)/draw_wall.c \
+# 		$(gfxdir)/exec.c \
+# 		$(gfxdir)/keymap.c \
+# 		$(gfxdir)/movement.c \
+# 		$(gfxdir)/raycast.c \
+# 		$(gfxdir)/wallcolli.c \
+# 		$(gfxdir)/init_mlx.c \
+# 		$(gfxdir)/exit_utils.c \
+# 		$(gfxdir)/init_tex.c \
+# 		$(gfxdir)/utils.c
 
 # Object files
 ODIR	:=	obj
@@ -125,7 +146,7 @@ $(NAME): $(LIBC) $(LIBX) $(OBJ)
 # Define a pattern rule that compiles every .c file into a .o file
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 PHONY	+= build_info
-$(ODIR)/%.o : %.c
+$(ODIR)/%.o : %.c | build_info
 	@mkdir -p $(dir $@)
 	@printf "${L_BLUE}[prereq]: ${L_GREEN}%-30s ${L_BLUE}[target]: ${L_GREEN}%s${RESET}\n" "$<" "$@"
 	@$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
@@ -159,6 +180,7 @@ libx: ## rebuilds the minilibx directory for the OS
 PHONY	+=	cubEd
 SHIFT	=	$(eval O=$(shell echo $$((($(O)%15)+1))))
 cubED:
+	@echo "$(C)$(O)$(L)# -------------------------------------------------------------------------------- #$(RESET)"
 	@echo "$(C)$(O)$(L) ______     __  __     ______     ______     _____    ";
 	@echo "$(C)$(O)$(L)/\  ___\   /\ \/\ \   /\  == \   /\___  \   /\  __ \  ";
 	$(SHIFT)
@@ -167,6 +189,7 @@ cubED:
 	$(SHIFT)
 	@echo "$(C)$(O)$(L)  \/_____/   \/_____/   \/_____/  \/______/   \/____/ ";
 	@echo "$(C)$(O)$(L)                                                      ";
+	@echo "$(C)$(O)$(L)# -------------------------------------------------------------------------------- #$(RESET)"
 
 PHONY	+= info
 info: ## prints project based info
@@ -187,25 +210,18 @@ info: ## prints project based info
 PHONY	+= help
 help: ## prints a list of the possible commands
 	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
-#	@echo "${L_MAGENTA}Usage:${RESET} make [<option>...]"
 	@printf "${L_MAGENTA}%-15s ${RESET}${L_BLUE}make [<option>...]${RESET}\n\n" "Usage:"
 #	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
 	@printf "${L_MAGENTA}Option:${RESET}\n"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
 	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
-	
-#	start of command message
-#	@printf "\n${L_MAGENTA}%-15s ${RESET}${L_BLUE}make [<option>...]${RESET}\n" "Commands:"
 	@printf "%-15s ${L_BLUE}This MAKE has Super Cow Powers.${RESET}\n"
-#	@printf "${L_MAGENTA}%-15s ${RESET}${L_BLUE}This MAKE has Super Cow Powers.${RESET}\n"
 	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 
 .DEFAULT:
-#	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 	@echo "${L_RED}[Error]${RESET}: ${L_BLUE}\tUnknown target '${L_RED}$@${L_BLUE}'.${RESET}"
 	@${MAKE} -s help
 #	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
 #	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
-#	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 
 .PHONY: $(PHONY)

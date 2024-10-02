@@ -6,7 +6,7 @@
 #    By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/08 15:41:48 by myousaf           #+#    #+#              #
-#    Updated: 2024/09/22 21:43:05 by myousaf          ###   ########.fr        #
+#    Updated: 2024/10/02 18:08:05 by myousaf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,7 @@ memdir		:=	./mem
 stringdir	:=	./string
 stringsdir	:=	./strings
 lstdir		:=	./lst
+utilsdir	:=	./utils
 printf		:=	./ft_printf
 gnl			:=	./gnl
 
@@ -110,7 +111,9 @@ CFILES	:=	$(asciidir)/atoll.c \
 			$(lstdir)/ft_lstlast.c \
 			$(lstdir)/ft_lstmap.c \
 			$(lstdir)/ft_lstnew.c \
-			$(lstdir)/ft_lstsize.c
+			$(lstdir)/ft_lstsize.c \
+			$(utilsdir)/array_size.c \
+			$(utilsdir)/ft_tabdup.c
 
 CFILES	+=	$(printf)/ft_char.c \
 			$(printf)/ft_hexa.c \
@@ -138,11 +141,11 @@ PHONY	+= compiler_info
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 $(ODIR)/%.o: %.c | compiler_info
 	@mkdir -p $(dir $@)
-#	@printf "${L_BLUE}prereq: ${L_GREEN}%-30s ${L_BLUE}target: ${L_GREEN}%s${RESET}\n" "$<" "$@"
+	@printf "${L_BLUE}prereq: ${L_GREEN}%-30s ${L_BLUE}target: ${L_GREEN}%s${RESET}\n" "$<" "$@"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 compiler_info:
-#	@echo "${L_CYAN}[compiler info]: ${L_MAGENTA}$(CC) -c $(CFLAGS) $(CPPFLAGS)${RESET}"
+	@echo "${L_CYAN}[compiler info]: ${L_MAGENTA}$(CC) -c $(CFLAGS) $(CPPFLAGS)${RESET}"
 
 $(NAME): $(OBJS) $(ODIR)
 	@ar -rcs $(NAME) $(OBJS)

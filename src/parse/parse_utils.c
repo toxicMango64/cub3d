@@ -5,20 +5,83 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/19 04:38:03 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/22 13:25:36 by myousaf          ###   ########.fr       */
+/*   Created: 2024/10/01 16:01:44 by myousaf           #+#    #+#             */
+/*   Updated: 2024/10/02 17:52:08 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// printf("%s\n", processed_line);
-// if (strpbrk(processed_line, WHITESPACE))
-// {
-// 	printf("Error: Map does not follow the strict Order");
-// 	return (EXIT_FAILURE);
-// }
-int	update_map(t_soul_catcher *game, char *processed_line, char *line)
+// cub3D: Error opening file: Error reading 'filename'
+int	file_signature_check(int case_n, const char *t_file)
+{
+	int		fd;
+	ssize_t	offset;
+
+	offset = 0;
+	while (t_file[offset] != '\0')
+		offset++;
+	if ((MAP == case_n && strcmp_sst(t_file, ".cub", offset - 4))
+		|| (TEXTURE == case_n && strcmp_sst(t_file, ".xpm", offset - 4)))
+		return (perr("Cub3d: unknown suffix '%s'", t_file));
+	fd = open(t_file, O_RDONLY);
+	if (fd == -1)
+		return (perr("Cub3d: %s '%s'", FOPEN, t_file));
+	close(fd);
+	return (EXIT_SUCCESS);
+}
+
+int	is_set(t_soul_catcher *game, char **attribute_arr)
+{
+	if (ft_strncmp(attribute_arr[0], "NO", 2) == 0)
+	{
+		if (game->textures->north)
+			return (perr("Duplicate north texture detected."));
+	}
+	else if (ft_strncmp(attribute_arr[0], "SO", 2) == 0)
+	{
+		if (game->textures->south)
+			return (perr("Duplicate south texture detected."));
+	}
+	else if (ft_strncmp(attribute_arr[0], "WE", 2) == 0)
+	{
+		if (game->textures->west)
+			return (perr("Duplicate west texture detected."));
+	}
+	else if (ft_strncmp(attribute_arr[0], "EA", 2) == 0)
+	{
+		if (game->textures->east)
+			return (perr("Duplicate east texture detected."));
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	check_invalid_char(char *map_line)
+{
+	static int	player_found;
+	int			i;
+
+	i = 0;
+	while (map_line[i])
+	{
+		if (map_line[i] == 'N' || map_line[i] == 'S' || map_line[i] == 'E'
+			|| map_line[i] == 'W')
+		{
+			if (player_found == 0)
+				player_found = 1;
+			else
+				return ((perr("Duplicate player found!")), EXIT_FAILURE);
+		}
+		if (map_line[i] != '1' && map_line[i] != '0' && map_line[i] != ' '
+			&& map_line[i] != 'N' && map_line[i] != 'S'
+			&& map_line[i] != 'E' && map_line[i] != 'W')
+			return (EXIT_FAILURE);
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	update_map(t_soul_catcher *game, char *line)
 {
 	char	*temp;
 
@@ -26,41 +89,5 @@ int	update_map(t_soul_catcher *game, char *processed_line, char *line)
 		game->map->full = ft_strdup("");
 	temp = game->map->full;
 	game->map->full = ft_strjoin(game->map->full, line);
-	return (free(temp), free(processed_line), EXIT_SUCCESS);
-}
-
-int	is_set(t_soul_catcher *game, t_texture_type type)
-{
-	if (type == NORTH && game->textures->north)
-		return (printf("Duplicate north texture detected.\n"));
-	if (type == EAST && game->textures->east)
-		return (printf("Duplicate east texture detected.\n"));
-	if (type == WEST && game->textures->west)
-		return (printf("Duplicate west texture detected.\n"));
-	if (type == SOUTH && game->textures->south)
-		return (printf("Duplicate south texture detected.\n"));
-	if (type == FLOOR && game->textures->floor)
-		return (printf("Duplicate floor texture detected.\n"));
-	if (type == CEILING && game->textures->ceiling)
-		return (printf("Duplicate ceiling texture detected.\n"));
-	return (EXIT_SUCCESS);
-}
-
-int	assign_texture(t_texture_type type, char *texture, t_soul_catcher *game)
-{
-	if (is_set(game, type))
-		return (EXIT_FAILURE);
-	if (type == NORTH)
-		game->textures->north = ft_strtrim(texture, WHITESPACE);
-	else if (type == EAST)
-		game->textures->east = ft_strtrim(texture, WHITESPACE);
-	else if (type == WEST)
-		game->textures->west = ft_strtrim(texture, WHITESPACE);
-	else if (type == SOUTH)
-		game->textures->south = ft_strtrim(texture, WHITESPACE);
-	else if (type == FLOOR)
-		game->textures->floor = ft_strtrim(texture, WHITESPACE);
-	else if (type == CEILING)
-		game->textures->ceiling = ft_strtrim(texture, WHITESPACE);
-	return (EXIT_SUCCESS);
+	return (free(temp), EXIT_SUCCESS);
 }

@@ -6,20 +6,18 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:10:29 by myousaf           #+#    #+#             */
-/*   Updated: 2024/04/09 06:13:03 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/26 05:50:42 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_putstr_fd(char *s, int fd)
 {
 	int	i;
 
-	i = 0;
-	while (s[i] != '\0')
-	{
+	i = -1;
+	while (s[++i] != '\0')
 		write(fd, &s[i], 1);
-		i++;
-	}
+	return (i);
 }

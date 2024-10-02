@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tabdup.c                                           :+:      :+:    :+:   */
+/*   ft_tabdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 21:04:10 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/23 05:30:41 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:07:01 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "utils.h"
 
 char	*ft_strac(char *str, char c)
 {
@@ -32,6 +32,16 @@ char	*ft_strac(char *str, char c)
 	new_str[i] = '\0';
 	free(str);
 	return (new_str);
+}
+
+static char	check_char(char c)
+{
+	char	zero;
+
+	zero = '0';
+	if (ft_strchr(WHITESPACE, c))
+		return (c);
+	return (zero);
 }
 
 static char	**tab_help(char **new_tab, char *str)
@@ -68,20 +78,8 @@ char	**ft_tabjoin(char **tab, char *str)
 	return (new_tab);
 }
 
-static char	check_char(char c)
+char	**ft_tabdup(char **tab, char fill_char, int x, int y)
 {
-	char	zero;
-
-	zero = '0';
-	if (ft_strchr(WHITESPACE, c))
-		return (c);
-	return (zero);
-}
-
-char	**ft_tabdup(char **tab, char fill_char)
-{
-	int		y;
-	int		x;
 	char	**duped_tab;
 	char	*line;
 
@@ -89,8 +87,8 @@ char	**ft_tabdup(char **tab, char fill_char)
 	duped_tab = NULL;
 	while (tab[++y])
 	{
-		line = NULL;
 		x = -1;
+		line = NULL;
 		while (tab[y][++x])
 		{
 			if (!fill_char)

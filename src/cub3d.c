@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/26 02:29:38 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 17:37:09 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,78 +16,31 @@
 int	validate(const int ac, const char *const *av)
 {
 	if (ac != 2)
-		return (printf("Usage: %s <map_file>\n", av[0]), 1);
-	if (file_signature_check(1, av[1], av[0]))
-		exit (-1);
+		return (perr("Usage: %s <input map file>", av[0]));
+	if (file_signature_check(MAP, av[1]))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-// int	close_x(t_soul_catcher *game)
-// {
-// 	mlx_destroy_window(game->p_mlx, game->p_win);
-// 	free(game->p_mlx);
-// 	printf("<<<<<<HERE>>>>>>\n");
-// 	// close_free(game);
-// 	exit(0);
-// 	return (0);
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-int	close_win(t_soul_catcher *game)
-{
-	mlx_destroy_window(game->p_mlx, game->p_win);
-	free(game->p_mlx);
-	printf("<<<<<<HERE>>>>>>\n");
-	// close_free(game);
-	exit(0);
-	return (0);
-}
-
-void	gfx_setup(t_soul_catcher *game)
-{
-
-	game->p_mlx = mlx_init();
-	game->p_win = mlx_new_window(game->p_mlx, GAMEWIDTH, GAMEHEIGHT, "cub3D");
-
-
-	// mlx_loop(game->p_mlx);
-	// mlx_hook(game->p_win, 17, 0, close_win, &game);
-	// mlx_hook(game->p_win, 17, 1L << 2, handle_destroy, &game);
-	// mlx_hook(game->p_win, 2, 1L << 0, handle_keypress, &game);
-	// mlx_loop(game->p_mlx);
-}
-
-
-
 int	main(const int ac, const char *const *av)
 {
-	t_soul_catcher	game;
-	t_map			map;
-	t_point			player;
-	t_textures		textures;
+	t_soul_catcher	*game;
+	char			*line;
 
 	if (validate(ac, av))
 		return (EXIT_FAILURE);
-	init_soul_catcher(&game, &player, &map, &textures);
-	map.fd = open(av[1], O_RDONLY);
-	if (extractfile(&game, map.fd))
-		return (close(game.map->fd), EXIT_FAILURE);
-	if (is_map_valid(&game))
-		return (close(game.map->fd), free(game.map->full), \
-			freearr(map.grid), free_textures(game.textures), EXIT_FAILURE);
-	print_info(*game.textures, map);
-	gfx_setup(&game);
+	game = ft_calloc(1, sizeof(t_soul_catcher));
+	if (!game || init_soul_catcher(game))
+		return (perr("Cub3d: Could not initialize game"), EXIT_FAILURE);
+	game->map->fd = open(av[1], O_RDONLY);
+	line = get_next_line(game->map->fd);
+	if (!line)
+		return (perr("empty map lol"));
+	if (extractfile(game, line, game->map->fd))
+		return (free_soul_catcher(game), EXIT_FAILURE);
+	if (is_map_valid(game))
+		return (free_soul_catcher(game), EXIT_FAILURE);
+	print_info(game->textures, game->map);
+	// exec_game(game);
 	return (EXIT_SUCCESS);
 }

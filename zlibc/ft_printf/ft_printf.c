@@ -18,23 +18,23 @@ static	int	ft_format(int fd, char c, va_list args)
 
 	len = 0;
 	if (c == 'c')
-		len = len + ft_putchar_fd(va_arg(args, int), fd);
+		len += ft_putchar_fd(va_arg(args, int), fd);
 	else if (c == 's')
-		len = len + ft_putstr_fd(va_arg(args, char *), fd);
+		len += ft_putstr_fd(va_arg(args, char *), fd);
 	else if (c == 'd' || c == 'i')
-		len = len + ft_putnbr_fd(va_arg(args, int), fd);
+		len += ft_putnbr_fd(va_arg(args, int), fd);
 	else if (c == 'u')
-		len = len + ft_unsignednbr(va_arg(args, unsigned int), fd);
+		len += ft_unsignednbr(va_arg(args, unsigned int), fd);
 	else if (c == 'x')
-		len = len + ft_lilx(va_arg(args, unsigned int));
+		len += ft_lilx(va_arg(args, unsigned int));
 	else if (c == 'X')
-		len = len + ft_bigx(va_arg(args, unsigned int));
+		len += ft_bigx(va_arg(args, unsigned int));
 	else if (c == 'p')
-		len = len + ft_ptrx(va_arg(args, unsigned long));
+		len += ft_ptrx(va_arg(args, unsigned long));
 	else if (c == '%')
-		len = len + ft_putchar_fd('%', fd);
+		len += ft_putchar_fd('%', fd);
 	else
-		len = len + ft_putchar_fd(c, fd);
+		len += ft_putchar_fd(c, fd);
 	return (len);
 }
 

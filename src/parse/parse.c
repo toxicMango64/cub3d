@@ -6,95 +6,135 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 04:38:06 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/26 02:22:40 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 17:39:23 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// cub3D: Error opening file: Error reading 'filename'
-int	file_signature_check(int case_n, const char *t_file, const char *prog)
+int	check_assign_color(t_soul_catcher *game, char **color_value, \
+	char **c_hex, int i)
 {
-	int		fd;
-	ssize_t	offset;
-
-	offset = 0;
-	while (t_file[offset] != '\0')
-		offset++;
-	if (1 == case_n && strcmp_sst(t_file, ".cub", offset - 4))
-		return (printf("%s: unknown suffix '%s' -- ignored", prog, t_file));
-	else if (2 == case_n && strcmp_sst(t_file, ".xpm", offset - 4))
-		return (printf("%s: unknown suffix '%s' -- ignored", prog, t_file));
-	fd = open(t_file, O_RDONLY);
-	if (fd == -1)
-		return (printf("%s: %s '%s'", prog, FILEOPEN, t_file));
-	close(fd);
+	if (count_commas(color_value[1]) != 2)
+		return (perr("invalid color format {R,G,B}"));
+	if (ft_strncmp(color_value[0], "C", 1) == 0)
+	{
+		if (game->textures->ceiling)
+			return (freearr(c_hex), perr("cu3d: C: RGB exists"));
+		game->textures->ceiling = color_value[1];
+	}
+	else if (ft_strncmp(color_value[0], "F", 1) == 0)
+	{
+		if (game->textures->floor)
+			return (freearr(c_hex), perr("cu3d: F: RGB exists"));
+		game->textures->floor = color_value[1];
+	}
+	while (c_hex[++i])
+	{
+		if (__check_color(game, c_hex, color_value, i))
+			return (perr("invalid RGB format"));
+	}
 	return (EXIT_SUCCESS);
 }
 
-int	ret__(t_soul_catcher *game, char *line, int case_n)
+// revised assign_texture and color
+int	assign_texture_revised(t_soul_catcher *game, char **attribute_arr)
 {
-	(free_textures(game->textures), free(line));
-	if (case_n)
-		wrerr("Map does not follow the strict Order");
-	return (1);
-}
+	char	**color;
 
-int	set_game_data(t_soul_catcher *game, char *line, char **t_ids)
-{
-	int			i;
-	static int	texture_count;
-	char		*processed_line;
-
-	i = -1;
-	processed_line = ft_strtrim(line, WHITESPACE);
-	// printf ("line: {%s}\n", processed_line);
-	while (t_ids[++i] && 6 > texture_count)
+	if ((ft_strncmp(attribute_arr[0], "C", 1) == 0
+			|| ft_strncmp(attribute_arr[0], "F", 1) == 0))
 	{
-		if (!ft_strncmp(processed_line, t_ids[i], ft_strlen(t_ids[i])))
-		{
-			if (game->map->full)
-				return (ret__(game, processed_line, 1));
-			if (assign_texture(i, processed_line + ft_strlen(t_ids[i]), game))
-				return (ret__(game, processed_line, 0));
-			texture_count += 1;
-			return (free(processed_line), EXIT_SUCCESS);
-			// break ;
-		}
+		color = ft_split(attribute_arr[1], ',');
+		if (!color || !color[0] || !color[1] || !color[2] || color[3])
+			return (freearr(color), perr("invalid texture"));
+		if (check_assign_color(game, attribute_arr, color, -1))
+			return (EXIT_FAILURE);
+		return (EXIT_SUCCESS);
 	}
-	if (processed_line[0] == '1')
-		return (update_map(game, processed_line, line));
-	// if (printf("texture count {%d}\n", texture_count) && texture_count <= 5 && processed_line[0] != '1')
-	// {
-	// 	return (free(processed_line), EXIT_FAILURE);
-	// }
-	// else
-	// 	return (update_map(game, processed_line, line));
-	return (free(processed_line), EXIT_SUCCESS);
+	if (file_signature_check(TEXTURE, attribute_arr[1]))
+		return (EXIT_FAILURE);
+	if (is_set(game, attribute_arr))
+		return (EXIT_FAILURE);
+	else if (ft_strncmp(attribute_arr[0], "NO", 2) == 0)
+		return (game->textures->north = attribute_arr[1], EXIT_SUCCESS);
+	else if (ft_strncmp(attribute_arr[0], "SO", 2) == 0)
+		return (game->textures->south = attribute_arr[1], EXIT_SUCCESS);
+	else if (ft_strncmp(attribute_arr[0], "WE", 2) == 0)
+		return (game->textures->west = attribute_arr[1], EXIT_SUCCESS);
+	else if (ft_strncmp(attribute_arr[0], "EA", 2) == 0)
+		return (game->textures->east = attribute_arr[1], EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
-int	extractfile(t_soul_catcher *game, int fd)
+int	set_game_data(t_soul_catcher *game, char *line, char **t_ids, int *chk_att)
 {
-	char		*line;
-	static char	*t_ids[7] = {"NO", "EA", "WE", "SO", "F", "C", NULL};
+	char	**split;
 
-	line = get_next_line(fd);
-	if (!line)
-		return (perr("empty map lol", 13), 13);
+	if (!(*chk_att))
+	{
+		if (line[0] == '1' || line[0] == '0')
+			return (perr("missing texture/color"));
+		split = ft_split(line, ' ');
+		if (!split || !split[0] || !split[1] || split[2])
+			return (freearr(split), perr("Txture/Color attribute failure"));
+		if (valid_txture_color_name(t_ids, split[0]))
+		{
+			if (assign_texture_revised(game, split))
+				return (EXIT_FAILURE);
+			if (are_all_txtures_colors_set(game->textures))
+				*chk_att = 1;
+		}
+		else
+			return (freearr(split), perr("Invalid Txture/Color attribute"));
+		return (EXIT_SUCCESS);
+	}
+	free(line);
+	return (EXIT_SUCCESS);
+}
+
+int	parse_map(t_soul_catcher *game, char *line, int *map_started)
+{
+	char	*trimmed;
+
+	*map_started = 1;
+	trimmed = ft_strtrim(line, "\n");
+	if (!trimmed)
+		return (perr("Failed to trim map line"), EXIT_FAILURE);
+	if (trimmed[0] == '\0')
+		return (perr("invalid map"), EXIT_FAILURE);
+	if (check_invalid_char(trimmed) == EXIT_FAILURE)
+		return (free(trimmed), perr("invalid line in map:%s", line));
+	update_map(game, line);
+	free(trimmed);
+	return (EXIT_SUCCESS);
+}
+
+int	extractfile(t_soul_catcher *game, char *line, int fd)
+{
+	static char	*t_ids[7] = {"NO", "EA", "WE", "SO", "F", "C", NULL};
+	static int	chk_att;
+	static int	map_started;
+
 	while (line)
 	{
-		if (line[0] || line[0] == '\n')
+		if (!chk_att && line[0] != '\n')
 		{
-			if (set_game_data(game, line, t_ids))
+			if (set_game_data(game, ft_strtrim(line, WHITESPACE), t_ids, \
+				&chk_att))
 				return (free(line), EXIT_FAILURE);
-			free(line);
-			line = ft_strdup("");
 		}
-		free(line);
-		line = get_next_line(fd);
-		if (!line)
-			break ;
+		else if (chk_att)
+		{
+			if (!map_started && line[0] == '\n')
+			{
+				(free(line), line = get_next_line(fd));
+				continue ;
+			}
+			if (parse_map(game, line, &map_started))
+				return (free(line), EXIT_FAILURE);
+		}
+		(free(line), line = get_next_line(fd));
 	}
-	return (free(line), EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
-

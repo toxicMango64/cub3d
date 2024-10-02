@@ -58,3 +58,34 @@ int	ft_atoi(const char *str)
 	}
 	return (result * sign);
 }
+
+int	ft_atoi_rgb(const char *str)
+{
+	long	i;
+	long	sign;
+	long	result;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
+		i++;
+	if ((str[i] == 45) || (str[i] == 43))
+	{
+		if (str[i] == 45)
+			sign *= -1;
+		i++;
+	}
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		if (maxlong(result, sign, str[i]) == 1)
+			return (-1);
+		else if (minlong(result, sign, str[i]) == 1)
+			return (0);
+		result = result * 10 + str[i] - '0';
+		i++;
+	}
+	if (str[i] != '\0')
+		return (-1);
+	return (result * sign);
+}

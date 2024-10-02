@@ -6,13 +6,13 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:10:29 by myousaf           #+#    #+#             */
-/*   Updated: 2024/04/09 06:12:59 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/09/26 05:50:23 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_putendl_fd(char *s, int fd)
+int	ft_putendl_fd(char *s, int fd)
 {
 	int	i;
 
@@ -23,4 +23,5 @@ void	ft_putendl_fd(char *s, int fd)
 		i++;
 	}
 	write(fd, "\n", 1);
+	return (i + 1);
 }

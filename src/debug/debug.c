@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 21:28:43 by myousaf           #+#    #+#             */
-/*   Updated: 2024/09/21 21:28:58 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 17:37:35 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "debug.h"
 
-void	print_info(t_textures textures, t_map map)
+void	print_info(t_textures *textures, t_map *map)
 {
+	int	i;
+
 	puts("Texture Paths: ");
-	if (printf("North texture: ") && puts(textures.north) && !textures.north)
+	if (!printf("North texture: {%s}\n", textures->north))
 		printf("North texture: ERROR!");
-	if (printf("East texture: ") && puts(textures.east) && !textures.east)
+	if (!printf("East texture: {%s}\n", textures->east))
 		printf("East texture: ERROR!");
-	if (printf("West texture: ") && puts(textures.west) && !textures.west)
+	if (!printf("West texture: {%s}\n", textures->west))
 		printf("West texture: ERROR!");
-	if (printf("South texture: ") && puts(textures.south) && !textures.south)
+	if (!printf("South texture: {%s}\n", textures->south))
 		printf("South texture: ERROR!");
-	if (printf("F color: ") && puts(textures.floor) && !textures.floor)
-		printf("Floor texture: ERROR!");
-	if (printf("C color: ") && puts(textures.ceiling) && !textures.ceiling)
-		printf("Ceiling texture: ERROR!");
-	if (map.full)
-		(puts("\nMap: "), puts(map.full));
+	i = -1;
+	printf("RGB value: \n");
+	while (map->floor_color[++i])
+		printf("{%i}", map->floor_color[i]);
+	i = -1;
+	printf("\nRGB value: \n");
+	while (map->ceiling_color[++i])
+		printf("{%i}", map->ceiling_color[i]);
+	if (map->full)
+		(puts("\nMap: "), puts(map->full));
 }
