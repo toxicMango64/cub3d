@@ -6,7 +6,7 @@
 #    By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/08 15:41:48 by myousaf           #+#    #+#              #
-#    Updated: 2024/10/02 18:08:05 by myousaf          ###   ########.fr        #
+#    Updated: 2024/10/03 13:49:20 by myousaf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,15 +60,15 @@ FR		+=	$(gnl:%.dSYM)
 
 RM		:=	rm -fr
 
-asciidir	:=	./ascii
-isdir		:=	./ft_is
-memdir		:=	./mem
-stringdir	:=	./string
-stringsdir	:=	./strings
-lstdir		:=	./lst
-utilsdir	:=	./utils
-printf		:=	./ft_printf
-gnl			:=	./gnl
+asciidir	:=	ascii
+isdir		:=	ft_is
+memdir		:=	mem
+stringdir	:=	string
+stringsdir	:=	strings
+lstdir		:=	lst
+utilsdir	:=	utils
+printf		:=	ft_printf
+gnl			:=	gnl
 
 CFILES	:=	$(asciidir)/atoll.c \
 			$(asciidir)/ft_atoi.c \
@@ -78,6 +78,7 @@ CFILES	:=	$(asciidir)/atoll.c \
 			$(isdir)/ft_isascii.c \
 			$(isdir)/ft_isdigit.c \
 			$(isdir)/ft_isprint.c \
+			$(isdir)/ft_isspace.c \
 			$(memdir)/ft_bzero.c \
 			$(memdir)/ft_calloc.c \
 			$(memdir)/ft_memchr.c \

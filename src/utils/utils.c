@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 16:01:44 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 21:30:48 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/03 20:35:24 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	__check_color(t_soul_catcher *game, char **c_hex, char **color_value, int i)
 {
 	int	c;
 
-	c = ft_atoi_rgb(c_hex[i]);
+	c = ft_atoi_rgb(c_hex[i], 0, 0);
 	if (0 > c || 255 < c)
 		return (EXIT_FAILURE);
 	if (ft_strncmp(color_value[0], "F", 1) == 0)

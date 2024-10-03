@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 18:51:46 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/03 20:33:23 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ int		count_commas(char *str);
 
 // valid_map.c
 int		is_map_valid(t_soul_catcher *game);
+
+// map_closed.c
+int		is_closed(t_soul_catcher *game, char **visited, int x, int y);
+int		is_closed_zero(t_soul_catcher *game, char **visited, int x, int y);
 
 // map_utils.c
 int		update_player(t_soul_catcher *game, int x, int y);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_validation.c                                   :+:      :+:    :+:   */
+/*   valid_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 19:47:39 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 18:10:44 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/03 20:34:58 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,45 @@ int	find_player_position(t_soul_catcher *game, t_point *player)
 	return (EXIT_SUCCESS);
 }
 
-int	is_closed(t_soul_catcher *game, char **visited, int x, int y)
-{
-	if (y < 0 || x < 0 || y >= game->map->width
-		|| x >= (int) ft_strlen(game->map->grid[y]))
-		return (FALSE);
-	if (game->map->grid[y][x] == '1' || visited[y][x] == '1')
-		return (TRUE);
-	else if (ft_strchr("0NEWS", game->map->grid[y][x]))
-		visited[y][x] = '1';
-	else if (x == 0 || ft_strchr(WHITESPACE, game->map->grid[y][x])
-		|| y == 0 || y == game->map->width - 1)
-		return (FALSE);
-	if (!is_closed(game, visited, x, y - 1)
-		|| !is_closed(game, visited, x + 1, y)
-		|| !is_closed(game, visited, x, y + 1)
-		|| !is_closed(game, visited, x - 1, y))
-		return (FALSE);
-	return (TRUE);
-}
+// int	is_closed(t_soul_catcher *game, char **visited, int x, int y)
+// {
+// 	if (y < 0 || x < 0 || y >= game->map->width
+// 		|| x >= (int) ft_strlen(game->map->grid[y]))
+// 		return (FALSE);
+// 	if (game->map->grid[y][x] == '1' || visited[y][x] == '1')
+// 		return (TRUE);
+// 	else if (ft_strchr("0NEWS", game->map->grid[y][x]))
+// 		visited[y][x] = '1';
+// 	else if (x == 0 || ft_strchr(WHITESPACE, game->map->grid[y][x])
+// 		|| y == 0 || y == game->map->width - 1)
+// 		return (FALSE);
+// 	if (!is_closed(game, visited, x, y - 1)
+// 		|| !is_closed(game, visited, x + 1, y)
+// 		|| !is_closed(game, visited, x, y + 1)
+// 		|| !is_closed(game, visited, x - 1, y))
+// 		return (FALSE);
+// 	return (TRUE);
+// }
+
+// int	is_closed_zero(t_soul_catcher *game, char **visited, int x, int y)
+// {
+// 	if (y < 0 || x < 0 || y >= game->map->width
+// 		|| x >= (int) ft_strlen(game->map->grid[y]))
+// 		return (FALSE);
+// 	if (game->map->grid[y][x] == '1' || visited[y][x] == '1')
+// 		return (TRUE);
+// 	else if (ft_strchr("0NEWS", game->map->grid[y][x]))
+// 		visited[y][x] = '1';
+// 	else if (x == 0 || ft_strchr(WHITESPACE, game->map->grid[y][x])
+// 		|| y == 0 || y == game->map->width - 1)
+// 		return (FALSE);
+// 	if (!is_closed(game, visited, x, y - 1)
+// 		|| !is_closed(game, visited, x + 1, y)
+// 		|| !is_closed(game, visited, x, y + 1)
+// 		|| !is_closed(game, visited, x - 1, y))
+// 		return (FALSE);
+// 	return (TRUE);
+// }
 
 short int	check_zero_surrounding(t_soul_catcher *game)
 {
@@ -70,8 +90,8 @@ short int	check_zero_surrounding(t_soul_catcher *game)
 		x = -1;
 		while (map[y][++x])
 			if (map[y][x] == '0')
-				if (help_check_zero_surrounding(map, y, x) == EXIT_SUCCESS)
-					continue ;
+				if (help_check_zero_surrounding(map, y, x) == EXIT_FAILURE)
+					return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }

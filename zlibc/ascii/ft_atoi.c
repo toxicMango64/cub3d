@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 06:05:30 by myousaf           #+#    #+#             */
-/*   Updated: 2024/04/09 06:07:12 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 22:48:29 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,9 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
-int	ft_atoi_rgb(const char *str)
+int	ft_atoi_rgb(const char *str, long sign, long result)
 {
 	long	i;
-	long	sign;
-	long	result;
 
 	i = 0;
 	sign = 1;

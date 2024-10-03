@@ -2,9 +2,9 @@
 #  Makefile builtin approach
 # **************************************************************************** #
 UNAME	=	$(shell uname -s)
-NAME	=	cub3d
+NAME	=	cub3D
 RM		=	rm -fr
-CFLAGS	+=	-Wall -Wextra -Werror -O3 -ffast-math -Iinc #-g3 -fsanitize=address
+CFLAGS	+=	-Wall -Wextra -Werror -O3 -ffast-math -Iinc #-g3# -fsanitize=address
 
 OBS		+=	cub3d.dSYM	\
 			.DS_Store \
@@ -23,13 +23,11 @@ endif
 #  SYSTEM SPECIFIC SETTINGS
 # **************************************************************************** #
 ifeq ($(UNAME), Linux)
-  INC		:=  ${shell find . -regex '.+\.h$$' | grep -v "minilibx"}
   MLXFLG	:=  -lXext -lX11
   NUMPROC	:=  $(shell grep -c ^processor /proc/cpuinfo)
   LIBX_DIR	+=  minilibx/linux
   CPPFLAGS	+=  -D LINUX -Wno-unused-result
 else ifeq ($(UNAME), Darwin)
-  INC		:=  ${shell find -E . -regex '.+\.h' | grep -v "minilibx"}
   NUMPROC	:=  $(shell sysctl -n hw.ncpu)
   MLXFLG	+=  -Lminilibx/opengl -lmlx
   MLXFLG	:=  -framework OpenGL -framework Appkit
@@ -216,7 +214,6 @@ help: ## prints a list of the possible commands
 #	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
 
 .PHONY: $(PHONY)
-
 
 # NO ./texture/north-StoneUWcrossL.xpm
 # SO ./texture/south-StoneUWflagL.xpm

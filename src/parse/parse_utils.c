@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 16:01:44 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 17:52:08 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 23:02:01 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	check_invalid_char(char *map_line)
 			if (player_found == 0)
 				player_found = 1;
 			else
-				return ((perr("Duplicate player found!")), EXIT_FAILURE);
+				return (perr("Duplicate player found!"));
 		}
 		if (map_line[i] != '1' && map_line[i] != '0' && map_line[i] != ' '
 			&& map_line[i] != 'N' && map_line[i] != 'S'

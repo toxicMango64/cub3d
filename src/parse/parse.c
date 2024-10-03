@@ -6,12 +6,13 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 04:38:06 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 17:39:23 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/02 23:04:28 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+// return (free(trimmed), perr("map isn't surrounded by walls: %s", line));
 int	check_assign_color(t_soul_catcher *game, char **color_value, \
 	char **c_hex, int i)
 {
@@ -100,11 +101,11 @@ int	parse_map(t_soul_catcher *game, char *line, int *map_started)
 	*map_started = 1;
 	trimmed = ft_strtrim(line, "\n");
 	if (!trimmed)
-		return (perr("Failed to trim map line"), EXIT_FAILURE);
+		return (perr("Failed to trim map line"));
 	if (trimmed[0] == '\0')
-		return (perr("invalid map"), EXIT_FAILURE);
-	if (check_invalid_char(trimmed) == EXIT_FAILURE)
-		return (free(trimmed), perr("invalid line in map:%s", line));
+		return (free(trimmed), perr("invalid map"));
+	if (check_invalid_char(trimmed))
+		return (free(trimmed), perr("invalid line in map: %s", line));
 	update_map(game, line);
 	free(trimmed);
 	return (EXIT_SUCCESS);
