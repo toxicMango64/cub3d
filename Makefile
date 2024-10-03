@@ -4,7 +4,7 @@
 UNAME	=	$(shell uname -s)
 NAME	=	cub3D
 RM		=	rm -fr
-CFLAGS	+=	-Wall -Wextra -Werror -O3 -ffast-math -Iinc #-g3# -fsanitize=address
+CFLAGS	+=	-Wall -Wextra -Werror -Iinc #-g3# -fsanitize=address
 
 OBS		+=	cub3d.dSYM	\
 			.DS_Store \
@@ -92,6 +92,7 @@ SRC	:=	$(SRCDIR)/cub3d.c \
 		$(parsedir)/parse_utils.c \
 		$(validdir)/valid_map.c \
 		$(validdir)/map_utils.c \
+		$(validdir)/map_closed.c \
 		$(gfxdir)/init_gfx.c \
 		$(gfxdir)/gfx_init_utils.c \
 		$(gfxdir)/init_xpm.c \
@@ -110,17 +111,27 @@ OBJ		:=	$(SRC:%.c=$(ODIR)/%.o)
 
 SANITIZED_FLAG	=	.sanitized
 
-PHONY	+= all clean info
+PHONY	+= all clean info createSANITIZED removeSANITIZED
 mode	?=
 ifeq ($(mode), debug)
-  CFLAGS	+=	$(SANITIZE) -g3
-
-  all: clean build_info $(NAME) info
+  CFLAGS	+=	-g3 $(SANITIZE)
+  all: createSANITIZED clean build_info $(NAME) info
 
 else
-  all: $(NAME) cubED ## builds the project
+  ifeq ( -f , $(SANITIZE))
+    all: clean removeSANITIZED $(NAME) cubED ## builds the project
+  
+  else
+    all: $(NAME) cubED ## builds the project
 
+  endif
 endif
+
+createSANITIZED:
+	@mkdir -p $(SANITIZED_FLAG)
+
+removeSANITIZED:
+	@$(RM) $(SANITIZED_FLAG)
 
 # non-phony targets
 $(LIBX):
@@ -192,7 +203,7 @@ info: ## prints project based info
 	@echo "${L_GREEN}CPPFLAGS${RESET}	:	${L_MAGENTA}${CPPFLAGS}${RESET}"
 	@echo "${L_GREEN}MAKEFLAGS${RESET}	:	${L_MAGENTA}${MAKEFLAGS}${RESET}"
 	@echo "${L_GREEN}LIBX${RESET}		:	${L_MAGENTA}${LIBX}${RESET}"
-	@echo "${L_GREEN}BUILD MODE${RESET}	:	${L_BLUE}${mode}${RESET}"
+	@echo "${L_GREEN}BUILD MODE${RESET}	:	${L_MAGENTA}${mode}${RESET}"
 	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${SRC}${RESET}"
 	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
 
