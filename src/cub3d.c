@@ -6,7 +6,7 @@
 /*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/03 20:36:09 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/03 22:50:51 by myousaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@ void	exec_game(t_soul_catcher *game)
 	mlx_loop(game->p_mlx);
 }
 
+/**
+ * @brief 
+ * @param ac 
+ * @param av 
+ * @return
+ * use print_info(game->textures, game->map); before exec_game(game); function
+ * to print debug info also uncomment the function in src/debug/debug.c
+ */
 int	main(const int ac, const char *const *av)
 {
 	t_soul_catcher	*game;
@@ -58,7 +66,8 @@ int	main(const int ac, const char *const *av)
 		return (free_soul_catcher(game), EXIT_FAILURE);
 	if (is_map_valid(game))
 		return (free_soul_catcher(game), EXIT_FAILURE);
-	print_info(game->textures, game->map);
 	exec_game(game);
 	return (EXIT_SUCCESS);
 }
+
+// clang -o output $(echo '#include <unistd.h> #include <string.h> #include <sys/types.h> #include <sys/syscall.h> int main(const int ac, const char *av[]) { write(1, av[1], strlen(av[1])); return (0); }') && ./output arg1

@@ -6,49 +6,13 @@
 #    By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/08 15:41:48 by myousaf           #+#    #+#              #
-#    Updated: 2024/10/03 13:49:20 by myousaf          ###   ########.fr        #
+#    Updated: 2024/10/03 21:16:35 by myousaf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# **************************************************************************** #
-# Define the colors
-# **************************************************************************** #
-GB			:=	\033[42m
-RESET		:=	\033[0m
-RED			:=	\033[0;31m
-WHITE		:=	\033[0;97m
-BLUE		:=	\033[0;34m
-GRAY		:=	\033[0;90m
-CYAN		:=	\033[0;36m
-BLACK		:=	\033[0;30m
-GREEN		:=	\033[0;32m
-YELLOW		:=	\033[0;33m
-MAGENTA		:=	\033[0;35m
-BLUE		:=	\033[0;36m
-L_RED		:=	\033[0;91m
-L_GRAY		:=	\033[0;37m
-L_BLUE		:=	\033[0;94m
-L_CYAN		:=	\033[0;96m
-L_GREEN		:=	\033[0;92m
-L_YELLOW	:=	\033[0;93m
-L_MAGENTA	:=	\033[0;95m
-
 NAME	:=	libft.a
-UNAME	:=	$(shell uname -s)
 CC		:=	cc
 CFLAGS	:=	-Wall -Wextra -Werror -O3
-
-ifeq ($(UNAME), Darwin) # mac
-	CC		:= cc
-	NUMPROC	:= $(shell sysctl -n hw.ncpu)
-else ifeq ($(UNAME), FreeBSD) # FreeBSD
-	CC	:=	clang
-else ifeq ($(UNAME), Linux) # linux or others
-#	CC	:=	gcc
-	CC		:=	clang-19
-	CFLAGS	+=	-D LINUX -Wno-unused-result
-	NUMPROC	:=	$(shell grep -c ^processor /proc/cpuinfo)
-endif
 
 FR		+=	$(asciidir:%.dSYM)
 FR		+=	$(isdir:%.dSYM)
@@ -133,20 +97,11 @@ CFILES	+=	$(gnl)/get_next_line.c \
 ODIR	:=	zobjdir
 OBJS	:=	$(CFILES:%.c=$(ODIR)/%.o)
 
-.PHONY: all clean fclean re
-
-# all:: MAKEFLAGS	+=	-j$(NUMPROC) ## builds the project
 all:: $(NAME)
 
-PHONY	+= compiler_info
-# Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
-$(ODIR)/%.o: %.c | compiler_info
+$(ODIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	@printf "${L_BLUE}prereq: ${L_GREEN}%-30s ${L_BLUE}target: ${L_GREEN}%s${RESET}\n" "$<" "$@"
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-compiler_info:
-	@echo "${L_CYAN}[compiler info]: ${L_MAGENTA}$(CC) -c $(CFLAGS) $(CPPFLAGS)${RESET}"
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(ODIR)
 	@ar -rcs $(NAME) $(OBJS)
@@ -159,14 +114,4 @@ fclean: clean
 
 re: fclean all
 
-PHONY	+= info
-info: ## prints project based info
-	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
-	@echo "${L_GREEN}NAME${RESET}		:	${L_MAGENTA}${NAME}${RESET}"
-	@echo "${L_GREEN}UNAME${RESET}		:	${L_MAGENTA}${UNAME}${RESET}"
-	@echo "${L_GREEN}NUMPROC${RESET}		:	${L_MAGENTA}${NUMPROC}${RESET}"
-	@echo "${L_GREEN}CC${RESET}		:	${L_MAGENTA}${CC}${RESET}"
-	@echo "${L_GREEN}CFLAGS${RESET}		:	${L_MAGENTA}${CFLAGS}${RESET}"
-	@echo "${L_GREEN}MAKEFLAGS${RESET}	:	${L_MAGENTA}${MAKEFLAGS}${RESET}"
-	@echo "${L_GREEN}SRC${RESET}		:\n	${L_BLUE}${CFILES}${RESET}"
-	@echo "${L_CYAN}# -------------------------------------------------------------------------------- #$(RESET)"
+.PHONY: all clean fclean re

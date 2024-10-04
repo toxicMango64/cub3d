@@ -7,7 +7,8 @@ OBJ=$(SRC:.swift=.o)
 C_SRC= mlx_xpm.c mlx_png.c mlx_string_put.c
 C_OBJ=$(C_SRC:.c=.o)
 # CFLAGS=-O3
-CFLAGS	=	-w -O3 -ffast-math
+# CFLAGS	=	-w -O3 -ffast-math
+CFLAGS	=	-O3 -ffast-math
 
 NAME=libmlx.dylib
 

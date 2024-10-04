@@ -14,7 +14,8 @@ mlx_mouse.m
 
 OBJ1	=	$(SRC:.c=.o)
 OBJ		=	$(OBJ1:.m=.o)
-CFLAGS	+=	-w -O3 -ffast-math
+# CFLAGS	+=	-w -O3 -ffast-math
+CFLAGS	+=	-O3 -ffast-math
 
 # add to match string put with X11 in size and position
 CFLAGS	+=	-DSTRINGPUTX11
