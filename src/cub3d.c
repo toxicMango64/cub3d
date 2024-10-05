@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nosman <nosman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:58:56 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/03 20:36:09 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/05 12:27:49 by nosman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "debug.h"
 
 int	validate(const int ac, const char *const *av)
 {
@@ -58,7 +57,6 @@ int	main(const int ac, const char *const *av)
 		return (free_soul_catcher(game), EXIT_FAILURE);
 	if (is_map_valid(game))
 		return (free_soul_catcher(game), EXIT_FAILURE);
-	print_info(game->textures, game->map);
 	exec_game(game);
 	return (EXIT_SUCCESS);
 }

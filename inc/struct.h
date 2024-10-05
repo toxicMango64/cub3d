@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nosman <nosman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:26:48 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 21:31:26 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/05 12:27:04 by nosman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define STRUCT_H
 
 # include "../zlibc/libft.h"
-// #include "debug.h"
 
 /** STRUCTURES **/
 typedef struct s_point
@@ -107,8 +106,6 @@ typedef struct s_game
 	t_map		*map;
 	t_textures	*textures;
 	t_point		*player_pos;
-
-	//added
 	t_ray		*ray;
 	t_player	*player;
 	t_img		frame;

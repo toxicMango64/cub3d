@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nosman <nosman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 06:38:37 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/02 17:42:52 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/05 12:18:20 by nosman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// if (textures->north || perr("error: could not free north texture"))
 void	free_textures(t_textures *textures)
 {
 	if (!textures)

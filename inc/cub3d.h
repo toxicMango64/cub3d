@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nosman <nosman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 05:51:08 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/03 20:33:23 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/05 12:26:14 by nosman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,19 @@
 # define F	4
 # define C	5
 
-# ifdef __APPLE__
-#  include <../minilibx/opengl/mlx.h>
-#  include <limits.h>
-#  define ESC 53
-#  define W 13
-#  define A 0
-#  define S 1
-#  define D 2
-#  define L 123
-#  define R 124
-#  define SHIFT 257
-#  define MOVE_SPEED 0.06
-#  define ROTATE_SPEED 0.035
-# endif
-
-# ifdef __linux__
-#  include "../minilibx/linux/mlx.h"
-#  include <linux/limits.h>
-#  define ESC 65307
-#  define W 119
-#  define A 97
-#  define S 115
-#  define D 100
-#  define LEFT 65361
-#  define L 123
-#  define R 124
-#  define MOVE_SPEED 0.06
-#  define ROTATE_SPEED 0.035
-# endif
+// mlx/gfx
+# include <../opengl/mlx.h>
+# include <limits.h>
+# define ESC 53
+# define W 13
+# define A 0
+# define S 1
+# define D 2
+# define L 123
+# define R 124
+# define SHIFT 257
+# define MOVE_SPEED 0.06
+# define ROTATE_SPEED 0.035
 
 # include "../zlibc/libft.h"
 # include "struct.h"

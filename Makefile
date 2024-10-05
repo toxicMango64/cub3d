@@ -3,37 +3,22 @@
 # **************************************************************************** #
 UNAME	=	$(shell uname -s)
 NAME	=	cub3D
+CC		:=	cc
+CFLAGS	+=	-Wall -Wextra -Werror -Iinc
 RM		=	rm -fr
-CFLAGS	+=	-Wall -Wextra -Werror -Iinc #-g3# -fsanitize=address
 
 OBS		+=	cub3d.dSYM	\
 			.DS_Store \
 			.vscode
 
-ifeq ($(UNAME), Darwin) # mac
-  CC	:= cc
-else ifeq ($(UNAME), Linux) # linux
-  CC	:=	clang-19
-else # or others
-	@echo "unsupported OS"
-	@exit (1);
-endif
-
 # **************************************************************************** #
 #  SYSTEM SPECIFIC SETTINGS
 # **************************************************************************** #
-ifeq ($(UNAME), Linux)
-  MLXFLG	:=  -lXext -lX11
-  NUMPROC	:=  $(shell grep -c ^processor /proc/cpuinfo)
-  LIBX_DIR	+=  minilibx/linux
-  CPPFLAGS	+=  -D LINUX -Wno-unused-result
-else ifeq ($(UNAME), Darwin)
-  NUMPROC	:=  $(shell sysctl -n hw.ncpu)
-  MLXFLG	+=  -Lminilibx/opengl -lmlx
-  MLXFLG	:=  -framework OpenGL -framework Appkit
-  CPPFLAGS	+=  -DSTRINGPUTX11
-  LIBX_DIR	+=  minilibx/opengl
-endif
+NUMPROC		:=  $(shell sysctl -n hw.ncpu)
+MLXFLG		+=  -Lopengl -lmlx
+MLXFLG		:=  -framework OpenGL -framework Appkit
+CPPFLAGS	+=  -DSTRINGPUTX11
+LIBX_DIR	+=  opengl
 
 # **************************************************************************** #
 #  Project based configuration
@@ -42,7 +27,6 @@ LIBC_DIR	=	zlibc
 LIBC		=	$(LIBC_DIR)/libft.a
 LIBX		=	$(LIBX_DIR)/libmlx.a
 LDFLAGS		+=	-L$(LIBC_DIR)
-SANITIZE	=	-fsanitize=address
 
 # **************************************************************************** #
 # Define the colors
@@ -75,7 +59,6 @@ L			:=	m
 # Source files
 SRCDIR		:=	src
 cleanupdir	:=	$(SRCDIR)/cleanup
-debugdir	:=	$(SRCDIR)/debug
 gfxdir		:=	$(SRCDIR)/gfx
 parsedir	:=	$(SRCDIR)/parse
 utilsdir	:=	$(SRCDIR)/utils
@@ -83,7 +66,6 @@ validdir	:=	$(SRCDIR)/validation
 gfxdir		:=  $(SRCDIR)/gfx
 
 SRC	:=	$(SRCDIR)/cub3d.c \
-		$(debugdir)/debug.c \
 		$(utilsdir)/cleanup.c \
 		$(utilsdir)/init_cub3d.c \
 		$(utilsdir)/gfx_cleanup.c \
@@ -109,29 +91,8 @@ SRC	:=	$(SRCDIR)/cub3d.c \
 ODIR	:=	obj
 OBJ		:=	$(SRC:%.c=$(ODIR)/%.o)
 
-SANITIZED_FLAG	=	.sanitized
-
-PHONY	+= all clean info createSANITIZED removeSANITIZED
-mode	?=
-ifeq ($(mode), debug)
-  CFLAGS	+=	-g3 $(SANITIZE)
-  all: createSANITIZED clean build_info $(NAME) info
-
-else
-  ifeq ( -f , $(SANITIZE))
-    all: clean removeSANITIZED $(NAME) cubED ## builds the project
-  
-  else
-    all: $(NAME) cubED ## builds the project
-
-  endif
-endif
-
-createSANITIZED:
-	@mkdir -p $(SANITIZED_FLAG)
-
-removeSANITIZED:
-	@$(RM) $(SANITIZED_FLAG)
+PHONY	+= all clean cubED
+all: $(NAME) cubED ## builds the project
 
 # non-phony targets
 $(LIBX):
@@ -143,8 +104,6 @@ $(LIBC):
 $(NAME): $(LIBC) $(LIBX) $(OBJ)
 	@$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(MLXFLG) $(OBJ) -o $(NAME) $(LIBC) $(LIBX)
 
-# Define a pattern rule that compiles every .c file into a .o file
-# Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 PHONY	+= build_info
 $(ODIR)/%.o : %.c | build_info
 	@mkdir -p $(dir $@)
@@ -161,7 +120,7 @@ clean: ## cleans all the obj files
 
 PHONY	+= fclean
 fclean: clean ## uses the rule clean and removes the obsolete files
-	@$(RM) $(NAME) $(ODIR) $(DEBUGODIR) $(OBS)
+	@$(RM) $(NAME) $(ODIR) $(OBS)
 	@$(MAKE) fclean -C $(LIBC_DIR)
 	@$(MAKE) clean -C $(LIBX_DIR)
 
@@ -179,7 +138,7 @@ libx: ## rebuilds the minilibx directory for the OS
 
 PHONY	+=	cubEd
 SHIFT	=	$(eval O=$(shell echo $$((($(O)%15)+1))))
-cubED:
+cubED: ## prints a fun little CUB3D ASCII art
 	@echo "$(C)$(O)$(L)# -------------------------------------------------------------------------------- #$(RESET)"
 	@echo "$(C)$(O)$(L) ______     __  __     ______     ______     _____    ";
 	@echo "$(C)$(O)$(L)/\  ___\   /\ \/\ \   /\  == \   /\___  \   /\  __ \  ";
@@ -211,7 +170,6 @@ PHONY	+= help
 help: ## prints a list of the possible commands
 	@echo "${L_CYAN}# ---------------------------------------------------------------- #$(RESET)"
 	@printf "${L_MAGENTA}%-15s ${RESET}${L_BLUE}make [<option>...]${RESET}\n\n" "Usage:"
-#	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/-/'
 	@printf "${L_MAGENTA}Option:${RESET}\n"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
 	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
@@ -221,12 +179,5 @@ help: ## prints a list of the possible commands
 .DEFAULT:
 	@echo "${L_RED}[Error]${RESET}: ${L_BLUE}\tUnknown target '${L_RED}$@${L_BLUE}'.${RESET}"
 	@${MAKE} -s help
-#	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; \
-#	{printf "${L_GREEN}%-15s ${L_BLUE}%s${RESET}\n", $$1, $$2}'
 
 .PHONY: $(PHONY)
-
-# NO ./texture/north-StoneUWcrossL.xpm
-# SO ./texture/south-StoneUWflagL.xpm
-# WE ./texture/west-StoneUWHitlerD.xpm
-# EA ./texture/east-StoneUWD.xpm

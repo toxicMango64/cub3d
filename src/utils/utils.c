@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myousaf <myousaf@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nosman <nosman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 16:01:44 by myousaf           #+#    #+#             */
-/*   Updated: 2024/10/03 20:35:24 by myousaf          ###   ########.fr       */
+/*   Updated: 2024/10/05 12:22:17 by nosman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,11 @@ int	count_commas(char *str)
 	int	i;
 	int	count;
 
-	i = 0;
+	i = -1;
 	count = 0;
-	while (str[i])
-	{
+	while (str[++i])
 		if (str[i] == ',')
 			count++;
-		i++;
-	}
 	return (count);
 }
 
@@ -58,9 +55,7 @@ int	valid_txture_color_name(char **t_ids, char *txture_color)
 
 	i = -1;
 	while (t_ids[++i])
-	{
 		if (!ft_strcmp(t_ids[i], txture_color))
 			return (1);
-	}
 	return (0);
 }

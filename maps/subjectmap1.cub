@@ -1,0 +1,13 @@
+NO ./texture/east-StoneUWD.xpm
+EA ./texture/east-StoneUWDcopy.xpm
+WE ./texture/east-StoneUWDcopy2.xpm
+SO ./texture/east-StoneUWDcopy3.xpm
+
+F 220,100,0
+C 225,30,0
+
+111111
+100101
+101001
+1100N1
+111111
